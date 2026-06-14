@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { th } from 'date-fns/locale/th';
 import 'react-datepicker/dist/react-datepicker.css';
