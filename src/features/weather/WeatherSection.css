@@ -1,0 +1,495 @@
+/* ═══════════════════════════════════════════════════
+   Weather Section — Dragonfly/GISTDA Exact Match
+   ═══════════════════════════════════════════════════ */
+
+.ws-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ─── Loading & Error ─── */
+.ws-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  gap: 12px;
+  color: #9ca3af;
+  font-size: 13px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.ws-loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #16a34a;
+  border-radius: 50%;
+  animation: ws-spin 0.8s linear infinite;
+}
+
+@keyframes ws-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ws-error {
+  padding: 32px 16px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 13px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.ws-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 8px 18px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ws-retry-btn:hover {
+  background: #15803d;
+}
+
+/* ═══════════ MAIN WEATHER CARD ═══════════ */
+.ws-main-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Green Header ── */
+.ws-card-header {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #f1f8e9 100%);
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid rgba(76, 175, 80, 0.1);
+}
+
+.ws-location-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.ws-location-icon {
+  color: #43a047;
+  flex-shrink: 0;
+}
+
+.ws-location-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #2e7d32;
+  line-height: 1.3;
+}
+
+.ws-date-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ws-date-icon {
+  color: #66bb6a;
+  flex-shrink: 0;
+}
+
+.ws-date-text {
+  font-size: 11px;
+  color: #558b2f;
+  font-weight: 400;
+}
+
+/* ── Selected Time Indicator ── */
+.ws-selected-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, #fff8e1, #fff3e0);
+  border-bottom: 1px solid rgba(255, 152, 0, 0.15);
+}
+
+.ws-selected-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #e65100;
+}
+
+.ws-selected-reset {
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  background: white;
+  border: 1px solid #ffcc80;
+  border-radius: 6px;
+  color: #e65100;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ws-selected-reset:hover {
+  background: #fff3e0;
+  border-color: #ff9800;
+}
+
+/* ── Temperature Section ── */
+.ws-temp-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 6px;
+}
+
+.ws-temp-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.ws-temp-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: #1b5e20;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.ws-temp-unit {
+  font-size: 16px;
+  font-weight: 500;
+  color: #4caf50;
+}
+
+.ws-description {
+  font-size: 13px;
+  color: #2e7d32;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.ws-temp-icon {
+  font-size: 56px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(255, 193, 7, 0.3));
+  animation: ws-icon-float 3s ease-in-out infinite;
+}
+
+@keyframes ws-icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ── Detail Grid (2×2) — Always visible ── */
+.ws-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 10px 14px;
+}
+
+.ws-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #f8faf8;
+  border-radius: 12px;
+  border: 1px solid #e8f5e9;
+  transition: all 0.2s ease;
+}
+
+.ws-detail-item:hover {
+  background: #e8f5e9;
+  border-color: #c8e6c9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.1);
+}
+
+.ws-detail-icon-wrap {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ws-detail-icon-wrap.rain {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.ws-detail-icon-wrap.wind {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.ws-detail-icon-wrap.humidity {
+  background: #e0f7fa;
+  color: #00838f;
+}
+
+.ws-detail-icon-wrap.direction {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+.ws-detail-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ws-detail-label {
+  font-size: 10px;
+  color: #78909c;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ws-detail-value {
+  font-size: 13px;
+  color: #263238;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ── Source ── */
+.ws-source {
+  padding: 6px 16px 10px;
+  font-size: 10px;
+  color: #a5d6a7;
+  text-align: right;
+  font-style: italic;
+}
+
+/* ═══════════ TAB BUTTONS ═══════════ */
+.ws-tab-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.ws-tab-btn {
+  flex: 1;
+  padding: 10px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #e0e0e0;
+  background: white;
+  color: #78909c;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ws-tab-btn.active {
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  color: white;
+  border-color: #2e7d32;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.25);
+}
+
+.ws-tab-btn:hover:not(.active) {
+  background: #f1f8e9;
+  border-color: #aed581;
+  color: #33691e;
+}
+
+/* ═══════════ FORECAST SECTION ═══════════ */
+.ws-forecast-section {
+  background: white;
+  border-radius: 14px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.ws-scroll-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ws-scroll-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e0e0e0;
+  color: #9e9e9e;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  z-index: 2;
+}
+
+.ws-scroll-btn:hover {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-color: #a5d6a7;
+}
+
+.ws-cards-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  flex: 1;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 2px 0;
+}
+
+.ws-cards-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Hourly Card ── */
+.ws-hourly-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  min-width: 68px;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ws-hourly-card:hover {
+  border-color: #a5d6a7;
+  background: #e8f5e9;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.12);
+}
+
+.ws-hourly-card.selected {
+  border-color: #43a047;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 12px rgba(46, 125, 50, 0.2);
+}
+
+.ws-card-time {
+  font-size: 11px;
+  font-weight: 600;
+  color: #37474f;
+}
+
+.ws-card-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.ws-card-temp {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1b5e20;
+}
+
+.ws-card-desc {
+  font-size: 8px;
+  color: #78909c;
+  text-align: center;
+  line-height: 1.2;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Daily Card ── */
+.ws-daily-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 10px;
+  min-width: 76px;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ws-daily-card:hover {
+  border-color: #a5d6a7;
+  background: #e8f5e9;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.12);
+}
+
+.ws-daily-card.selected {
+  border-color: #43a047;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 12px rgba(46, 125, 50, 0.2);
+}
+
+.ws-card-day {
+  font-size: 10px;
+  font-weight: 600;
+  color: #37474f;
+  white-space: nowrap;
+}
+
+.ws-card-date {
+  font-size: 10px;
+  color: #90a4ae;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ws-card-temp-range {
+  display: flex;
+  gap: 2px;
+  align-items: baseline;
+}
+
+.temp-min {
+  font-size: 12px;
+  font-weight: 500;
+  color: #78909c;
+}
+
+.temp-divider {
+  font-size: 11px;
+  color: #bdbdbd;
+}
+
+.temp-max {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1b5e20;
+}

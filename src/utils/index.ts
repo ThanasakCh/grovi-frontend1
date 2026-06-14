@@ -1,0 +1,1 @@
+export { captureMapThumbnail } from "./thumbnailCapture";

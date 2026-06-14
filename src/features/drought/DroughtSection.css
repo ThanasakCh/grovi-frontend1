@@ -1,0 +1,385 @@
+/* Drought Section Styles */
+
+.drought-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ========== Gauge ========== */
+.drought-gauge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.drought-gauge {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin-bottom: 12px;
+}
+
+.drought-gauge svg {
+  transform: rotate(-90deg);
+}
+
+.drought-gauge-bg {
+  fill: none;
+  stroke: #f3f4f6;
+  stroke-width: 12;
+}
+
+.drought-gauge-fill {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.2s ease-in-out, stroke 0.5s ease;
+}
+
+.drought-gauge-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.drought-gauge-score {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.drought-gauge-label {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.drought-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.drought-data-date {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 8px;
+}
+
+/* ========== Stats Cards ========== */
+.drought-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.drought-stat-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.drought-stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+}
+
+.drought-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.drought-stat-unit {
+  font-size: 12px;
+  font-weight: 400;
+  color: #9ca3af;
+  margin-left: 2px;
+}
+
+.drought-stat-label {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.drought-stat-sublabel {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* ========== Rainfall Chart ========== */
+.drought-chart-container {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.drought-chart-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.drought-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 100px;
+  padding-top: 8px;
+}
+
+.drought-chart-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.drought-chart-bar {
+  width: 100%;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.6s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.drought-chart-bar:hover {
+  opacity: 0.8;
+}
+
+.drought-chart-bar-value {
+  font-size: 8px;
+  color: #9ca3af;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.drought-chart-bar-date {
+  font-size: 8px;
+  color: #9ca3af;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ========== Risk Legend ========== */
+.drought-legend-container {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.drought-legend-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.drought-legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drought-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drought-legend-color {
+  width: 28px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.drought-legend-range {
+  font-size: 12px;
+  color: #374151;
+  font-weight: 500;
+  min-width: 50px;
+}
+
+.drought-legend-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ========== Risk Factors ========== */
+.drought-factors-container {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.drought-factor-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.drought-factor-item:last-child {
+  border-bottom: none;
+}
+
+.drought-factor-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.drought-factor-content {
+  flex: 1;
+}
+
+.drought-factor-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.drought-factor-value {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.drought-factor-bar {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: #f3f4f6;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.drought-factor-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.8s ease;
+}
+
+/* ========== Hex Info Popup ========== */
+.drought-hex-info {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.02);
+  margin-top: 8px;
+}
+
+.drought-hex-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.drought-hex-info-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.drought-hex-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 12px;
+}
+
+.drought-hex-info-label {
+  color: #6b7280;
+}
+
+.drought-hex-info-value {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* ========== Loading ========== */
+.drought-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 16px;
+}
+
+.drought-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f4f6;
+  border-top-color: #ef4444;
+  border-radius: 50%;
+  animation: drought-spin 0.8s linear infinite;
+}
+
+@keyframes drought-spin {
+  to { transform: rotate(360deg); }
+}
+
+.drought-loading-text {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ========== Animations ========== */
+@keyframes drought-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.drought-animate-pulse {
+  animation: drought-pulse 2s infinite;
+}
