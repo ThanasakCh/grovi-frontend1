@@ -238,24 +238,6 @@ const MobileMapPage: React.FC = () => {
       } catch (e) {
         console.warn("Globe projection not supported:", e);
       }
-
-      // Add atmosphere / sky effect for realistic globe look
-      try {
-        if (!(map as any).getLayer("sky-atmosphere")) {
-          (map as any).addLayer({
-            id: "sky-atmosphere",
-            type: "sky",
-            paint: {
-              "sky-type": "atmosphere",
-              "sky-atmosphere-sun": [0.0, 0.0],
-              "sky-atmosphere-sun-intensity": 15,
-            },
-          });
-        }
-      } catch (e) {
-        // Sky layer may not be supported on all styles
-        console.warn("Sky layer not supported:", e);
-      }
     });
 
     // Initialize draw control ONLY for desktop

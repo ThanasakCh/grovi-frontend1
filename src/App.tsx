@@ -15,34 +15,40 @@ import DrisProjectAnalysisPage from "./features/analysis/AnalysisPage";
 import DrisProjectFieldDetailPage from "./features/field/FieldDetailPage";
 import DrisProjectWeatherPage from "./features/weather/WeatherPage";
 import DrisProjectDroughtPage from "./features/drought/DroughtPage";
+import ProtectedRoute from "./features/auth/ProtectedRoute";
 
 function AppContent() {
   return (
     <div className="app">
       <Routes>
-        <Route path="/" element={<Navigate to="/dris_project" replace />} />
         <Route path="/auth" element={<AuthPage />} />
-        <Route path="/dris_project" element={<DrisProjectMapPage />} />
-        <Route
-          path="/dris_project/field/:fieldId"
-          element={<DrisProjectFieldDetailPage />}
-        />
-        <Route
-          path="/dris_project/health/:fieldId"
-          element={<DrisProjectHealthPage />}
-        />
-        <Route
-          path="/dris_project/analysis/:fieldId"
-          element={<DrisProjectAnalysisPage />}
-        />
-        <Route
-          path="/dris_project/weather/:fieldId"
-          element={<DrisProjectWeatherPage />}
-        />
-        <Route
-          path="/dris_project/drought/:fieldId"
-          element={<DrisProjectDroughtPage />}
-        />
+        
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Navigate to="/dris_project" replace />} />
+          <Route path="/dris_project" element={<DrisProjectMapPage />} />
+          <Route
+            path="/dris_project/field/:fieldId"
+            element={<DrisProjectFieldDetailPage />}
+          />
+          <Route
+            path="/dris_project/health/:fieldId"
+            element={<DrisProjectHealthPage />}
+          />
+          <Route
+            path="/dris_project/analysis/:fieldId"
+            element={<DrisProjectAnalysisPage />}
+          />
+          <Route
+            path="/dris_project/weather/:fieldId"
+            element={<DrisProjectWeatherPage />}
+          />
+          <Route
+            path="/dris_project/drought/:fieldId"
+            element={<DrisProjectDroughtPage />}
+          />
+        </Route>
+
         <Route path="*" element={<Navigate to="/dris_project" replace />} />
       </Routes>
     </div>
