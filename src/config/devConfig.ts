@@ -9,7 +9,7 @@
 
 // Set to true to enable mock user (bypass authentication)
 // Set to false for production or when testing real authentication
-export const DEV_MODE = true;
+export const DEV_MODE = false;
 
 // Mock user data for development (id must be valid UUID format)
 export const MOCK_USER = {
