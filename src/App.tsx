@@ -17,13 +17,36 @@ import DrisProjectWeatherPage from "./features/weather/WeatherPage";
 import DrisProjectDroughtPage from "./features/drought/DroughtPage";
 import ProtectedRoute from "./features/auth/ProtectedRoute";
 
+// Admin imports
+import AdminLoginPage from "./features/admin/AdminLoginPage";
+import AdminProtectedRoute from "./features/admin/AdminProtectedRoute";
+import AdminLayout from "./features/admin/AdminLayout";
+import AdminDashboardPage from "./features/admin/AdminDashboardPage";
+import AdminFieldsPage from "./features/admin/AdminFieldsPage";
+import AdminUsersPage from "./features/admin/AdminUsersPage";
+import AdminAlertsPage from "./features/admin/AdminAlertsPage";
+
 function AppContent() {
   return (
     <div className="app">
       <Routes>
         <Route path="/auth" element={<AuthPage />} />
         
-        {/* Protected Routes */}
+        {/* Admin Login Route */}
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+
+        {/* Admin Protected Routes */}
+        <Route element={<AdminProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+            <Route path="/admin/fields" element={<AdminFieldsPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route path="/admin/alerts" element={<AdminAlertsPage />} />
+          </Route>
+        </Route>
+
+        {/* Standard Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Navigate to="/dris_project" replace />} />
           <Route path="/dris_project" element={<DrisProjectMapPage />} />
