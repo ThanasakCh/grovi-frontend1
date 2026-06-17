@@ -143,11 +143,9 @@ const AdminLayout: React.FC = () => {
             </button>
             <div className="h-8 w-px bg-white/10 mx-2"></div>
             <div className="flex items-center gap-3 cursor-pointer group">
-              <img
-                alt="Admin Profile"
-                className="w-9 h-9 rounded-full border border-white/10 group-hover:border-[#4edea3] transition-colors object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD89NT9em1sSEfGjAri76L1h9UzP3gZ2ocT6WKtM-GDgyKVnnaLVDVgefuYEu__Gbes78_mez2otr90r4QfPPxdtfIhTaTexA8jW7u6kknJTDool80vj3h3fl3ldFXWkEJKouV_gpS5gg7-5ruERsC_wWQm0wGF9pX3rY9xwIpEMhyPaiUaeB5ZcdDIr5_sdFadPcjabM4o1SI_M2hp0T4BQLIRE6zPqyUdRkQbm61RcTXqR7Y3z368_thV5hzPLQQA7O9osh-aTgI"
-              />
+              <div className="w-9 h-9 rounded-full bg-[#4edea3]/20 border border-white/10 group-hover:border-[#4edea3] transition-colors flex items-center justify-center text-[#4edea3] font-bold text-sm select-none">
+                {adminName ? adminName.charAt(0).toUpperCase() : "A"}
+              </div>
               <div className="hidden md:block">
                 <p className="text-sm font-medium text-[#dae2fd] group-hover:text-[#4edea3] transition-colors">
                   {adminName}
