@@ -2,6 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import Swal from "sweetalert2";
 import { getDashboardAlerts } from "./services/adminApi";
+import {
+  Inbox,
+  AlertOctagon,
+  AlertTriangle,
+  Info,
+  CloudSun,
+  Droplet,
+  Thermometer,
+  RefreshCw,
+  CheckCircle
+} from "lucide-react";
 
 const AdminAlertsPage: React.FC = () => {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
@@ -101,7 +112,7 @@ const AdminAlertsPage: React.FC = () => {
                 : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-white"
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">all_inbox</span>
+            <Inbox className="w-4.5 h-4.5" />
             All Alerts ({alerts.length})
           </button>
           
@@ -113,7 +124,7 @@ const AdminAlertsPage: React.FC = () => {
                 : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-white"
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">error</span>
+            <AlertOctagon className="w-4.5 h-4.5" />
             Critical ({criticalCount})
             {criticalCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#EF4444] rounded-full animate-ping"></span>
@@ -128,7 +139,7 @@ const AdminAlertsPage: React.FC = () => {
                 : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-white"
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">warning</span>
+            <AlertTriangle className="w-4.5 h-4.5" />
             Warnings ({warningCount})
           </button>
 
@@ -140,7 +151,7 @@ const AdminAlertsPage: React.FC = () => {
                 : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-white"
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">info</span>
+            <Info className="w-4.5 h-4.5" />
             Information ({infoCount})
           </button>
         </div>
@@ -149,7 +160,7 @@ const AdminAlertsPage: React.FC = () => {
         <div className="bg-[#1E293B]/80 border border-white/10 rounded-xl p-4 flex items-center justify-between backdrop-blur-md">
           <div className="flex gap-3 items-center">
             <div className="w-9 h-9 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center text-[#F59E0B]">
-              <span className="material-symbols-outlined text-[22px]">partly_cloudy_day</span>
+              <CloudSun className="w-5 h-5" />
             </div>
             <div>
               <div className="text-[10px] text-[#bbcabf] uppercase tracking-wider font-bold">Drought Index</div>
@@ -181,10 +192,6 @@ const AdminAlertsPage: React.FC = () => {
               alert.severity === "critical" ? "bg-[#EF4444]/20 text-[#ffb4ab] border-[#EF4444]/30" :
               alert.severity === "warning" ? "bg-[#F59E0B]/20 text-[#f6db97] border-[#F59E0B]/30" :
               "bg-[#60A5FA]/20 text-[#d0e4ff] border-[#60A5FA]/30";
-            
-            const iconName = 
-              alert.severity === "critical" ? "water_drop" : 
-              alert.severity === "warning" ? "device_thermostat" : "update";
 
             return (
               <div
@@ -197,9 +204,13 @@ const AdminAlertsPage: React.FC = () => {
                 {/* Left Alert Details */}
                 <div className="flex gap-4">
                   <div className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 ${severityColor}/10 border border-${severityColor}/20`}>
-                    <span className={`material-symbols-outlined text-[22px]`} style={{ color: alert.severity === "critical" ? "#EF4444" : alert.severity === "warning" ? "#F59E0B" : "#60A5FA" }}>
-                      {iconName}
-                    </span>
+                    {alert.severity === "critical" ? (
+                      <Droplet className="w-5 h-5 text-[#EF4444]" />
+                    ) : alert.severity === "warning" ? (
+                      <Thermometer className="w-5 h-5 text-[#F59E0B]" />
+                    ) : (
+                      <RefreshCw className="w-5 h-5 text-[#60A5FA]" />
+                    )}
                   </div>
 
                   <div>
@@ -244,7 +255,7 @@ const AdminAlertsPage: React.FC = () => {
           })
         ) : (
           <div className="bg-[#1E293B]/40 border border-dashed border-white/10 rounded-xl p-12 text-center text-[#bbcabf]">
-            <span className="material-symbols-outlined text-4xl mb-3 text-white/20">verified</span>
+            <CheckCircle className="w-10 h-10 text-white/20 mb-3 mx-auto" />
             <p className="text-sm">ทุกอย่างเรียบร้อยดี! ไม่มีรายการแจ้งเตือนในขณะนี้</p>
           </div>
         )}

@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AlertTriangle, Plus, Mountain, User, ArrowRight, SearchX } from "lucide-react";
 
 const AdminFieldsPage: React.FC = () => {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
@@ -96,7 +97,7 @@ const AdminFieldsPage: React.FC = () => {
         <div className="flex gap-3 w-full md:w-auto">
           <div className="bg-[#1E293B]/80 border border-white/10 px-4 py-2 rounded-xl flex items-center gap-3 backdrop-blur-md flex-1 md:flex-none">
             <div className="w-8 h-8 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center text-[#F59E0B]">
-              <span className="material-symbols-outlined text-sm">warning</span>
+              <AlertTriangle className="w-4 h-4" />
             </div>
             <div>
               <div className="text-[10px] text-[#bbcabf]">Attention Needed</div>
@@ -107,7 +108,7 @@ const AdminFieldsPage: React.FC = () => {
             to="/dris_project"
             className="bg-[#4edea3] hover:bg-[#6ffbbe] text-[#003824] text-xs font-bold px-5 py-2.5 rounded-xl transition-colors shadow-lg shadow-[#4edea3]/20 flex items-center justify-center gap-2"
           >
-            <span className="material-symbols-outlined text-sm">add</span>
+            <Plus className="w-4 h-4" />
             เพิ่มแปลงใหม่
           </Link>
         </div>
@@ -209,7 +210,7 @@ const AdminFieldsPage: React.FC = () => {
                     />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-[#bbcabf]/40 gap-2">
-                      <span className="material-symbols-outlined text-4xl">landscape</span>
+                      <Mountain className="w-10 h-10" />
                       <span className="text-[10px]">No Map Image</span>
                     </div>
                   )}
@@ -249,7 +250,7 @@ const AdminFieldsPage: React.FC = () => {
 
                   {field.owner_name && (
                     <div className="text-[10px] text-[#bbcabf] flex items-center gap-1 mt-auto border-t border-white/5 pt-3">
-                      <span className="material-symbols-outlined text-[12px]">person</span>
+                      <User className="w-3.5 h-3.5" />
                       <span>เจ้าของ: {field.owner_name}</span>
                     </div>
                   )}
@@ -260,7 +261,7 @@ const AdminFieldsPage: React.FC = () => {
                       className="w-full py-2 rounded-lg border border-[#4edea3]/30 text-[#4edea3] hover:bg-[#4edea3]/10 transition-colors text-xs font-semibold flex items-center justify-center gap-1.5"
                     >
                       <span>ดูรายละเอียดแปลง</span>
-                      <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </div>
@@ -270,7 +271,7 @@ const AdminFieldsPage: React.FC = () => {
         </div>
       ) : (
         <div className="bg-[#1E293B]/40 border border-dashed border-white/10 rounded-xl p-12 text-center text-[#bbcabf]">
-          <span className="material-symbols-outlined text-4xl mb-3 text-white/20">search_off</span>
+          <SearchX className="w-10 h-10 text-white/20 mb-3 mx-auto" />
           <p className="text-sm">ไม่พบแปลงเกษตรกรรมที่ตรงตามเงื่อนไขที่เลือก</p>
         </div>
       )}

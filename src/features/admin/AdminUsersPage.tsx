@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UserPlus, Users, UserCheck, Ban, Trash2, SearchX } from "lucide-react";
 
 const AdminUsersPage: React.FC = () => {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
@@ -186,7 +187,7 @@ const AdminUsersPage: React.FC = () => {
           onClick={handleAddUserPlaceholder}
           className="flex items-center justify-center gap-2 bg-[#4edea3]/10 hover:bg-[#4edea3]/20 text-[#4edea3] border border-[#4edea3]/20 px-5 py-2.5 rounded-lg text-xs font-semibold transition-colors"
         >
-          <span className="material-symbols-outlined text-[18px]">person_add</span>
+          <UserPlus className="w-4.5 h-4.5" />
           Add New User
         </button>
       </div>
@@ -199,7 +200,7 @@ const AdminUsersPage: React.FC = () => {
           <div className="flex justify-between items-start mb-4">
             <p className="text-[10px] font-bold text-[#bbcabf] uppercase tracking-wider">Total Registered</p>
             <div className="w-9 h-9 rounded-lg bg-[#171f33] flex items-center justify-center text-[#4edea3]">
-              <span className="material-symbols-outlined text-[20px]">group</span>
+              <Users className="w-5 h-5" />
             </div>
           </div>
           <h3 className="text-3xl font-bold text-white tracking-tight">{summary?.total_users || users.length}</h3>
@@ -212,7 +213,7 @@ const AdminUsersPage: React.FC = () => {
           <div className="flex justify-between items-start mb-4">
             <p className="text-[10px] font-bold text-[#bbcabf] uppercase tracking-wider">Active Status</p>
             <div className="w-9 h-9 rounded-lg bg-[#171f33] flex items-center justify-center text-[#60A5FA]">
-              <span className="material-symbols-outlined text-[20px]">how_to_reg</span>
+              <UserCheck className="w-5 h-5" />
             </div>
           </div>
           <h3 className="text-3xl font-bold text-white tracking-tight">{summary?.active_users || users.filter(u => u.is_active).length}</h3>
@@ -225,7 +226,7 @@ const AdminUsersPage: React.FC = () => {
           <div className="flex justify-between items-start mb-4">
             <p className="text-[10px] font-bold text-[#bbcabf] uppercase tracking-wider">Disabled Accounts</p>
             <div className="w-9 h-9 rounded-lg bg-[#171f33] flex items-center justify-center text-[#F59E0B]">
-              <span className="material-symbols-outlined text-[20px]">block</span>
+              <Ban className="w-5 h-5" />
             </div>
           </div>
           <h3 className="text-3xl font-bold text-white tracking-tight">{users.filter(u => !u.is_active).length}</h3>
@@ -343,7 +344,7 @@ const AdminUsersPage: React.FC = () => {
                       className="w-8 h-8 rounded-lg inline-flex items-center justify-center text-[#ffb4ab] hover:bg-[#93000a]/20 hover:text-[#ffb4ab] transition-all"
                       title="Delete User"
                     >
-                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                      <Trash2 className="w-4.5 h-4.5" />
                     </button>
                   </td>
                 </tr>
@@ -371,7 +372,7 @@ const AdminUsersPage: React.FC = () => {
                   onClick={() => handleDeleteUser(user.id, user.name)}
                   className="w-8 h-8 rounded-lg flex items-center justify-center text-[#ffb4ab] hover:bg-[#93000a]/20"
                 >
-                  <span className="material-symbols-outlined text-[18px]">delete</span>
+                  <Trash2 className="w-4.5 h-4.5" />
                 </button>
               </div>
 
@@ -421,7 +422,7 @@ const AdminUsersPage: React.FC = () => {
 
         {filteredUsers.length === 0 && (
           <div className="text-center py-12 text-[#bbcabf] bg-[#1E293B]/40">
-            <span className="material-symbols-outlined text-4xl text-white/20 mb-2">search_off</span>
+            <SearchX className="w-10 h-10 text-white/20 mb-2 mx-auto" />
             <p className="text-xs">ไม่พบรายชื่อผู้ใช้งานที่ตรงตามเงื่อนไขที่ระบุ</p>
           </div>
         )}

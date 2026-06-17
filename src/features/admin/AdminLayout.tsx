@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Sprout, LayoutDashboard, Tractor, Users, BellRing, Settings, LogOut, Search, Bell } from "lucide-react";
 
 const AdminLayout: React.FC = () => {
   const location = useLocation();
@@ -31,9 +32,7 @@ const AdminLayout: React.FC = () => {
       <nav className="hidden md:flex flex-col w-[280px] h-screen fixed left-0 top-0 bg-[#171f33]/80 backdrop-blur-xl border-r border-white/10 shadow-xl z-50 py-6 px-4">
         <div className="flex items-center gap-3 mb-8 px-2">
           <div className="w-10 h-10 rounded-lg bg-[#4edea3]/20 flex items-center justify-center">
-            <span className="material-symbols-outlined text-[#4edea3] text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-              eco
-            </span>
+            <Sprout className="text-[#4edea3] w-6 h-6" />
           </div>
           <div>
             <h1 className="text-lg font-bold text-[#4edea3]">Grovi</h1>
@@ -50,9 +49,7 @@ const AdminLayout: React.FC = () => {
                 : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-[#dae2fd]"
             }`}
           >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive("/admin/dashboard") ? "'FILL' 1" : undefined }}>
-              dashboard
-            </span>
+            <LayoutDashboard className="w-5 h-5" />
             <span className="text-sm font-medium">Dashboard</span>
           </Link>
 
@@ -64,9 +61,7 @@ const AdminLayout: React.FC = () => {
                 : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-[#dae2fd]"
             }`}
           >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive("/admin/fields") ? "'FILL' 1" : undefined }}>
-              agriculture
-            </span>
+            <Tractor className="w-5 h-5" />
             <span className="text-sm font-medium">All Fields</span>
           </Link>
 
@@ -78,9 +73,7 @@ const AdminLayout: React.FC = () => {
                 : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-[#dae2fd]"
             }`}
           >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive("/admin/users") ? "'FILL' 1" : undefined }}>
-              group
-            </span>
+            <Users className="w-5 h-5" />
             <span className="text-sm font-medium">Users Management</span>
           </Link>
 
@@ -92,9 +85,7 @@ const AdminLayout: React.FC = () => {
                 : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-[#dae2fd]"
             }`}
           >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive("/admin/alerts") ? "'FILL' 1" : undefined }}>
-              notifications_active
-            </span>
+            <BellRing className="w-5 h-5" />
             <span className="text-sm font-medium">Alerts</span>
           </Link>
         </div>
@@ -104,14 +95,14 @@ const AdminLayout: React.FC = () => {
             onClick={() => alert("แผงควบคุมระบบ (System Settings) อยู่ในช่วงการพัฒนาเพิ่มเติม")}
             className="flex items-center gap-3 px-4 py-3 rounded-lg text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-[#dae2fd] transition-colors w-full text-left"
           >
-            <span className="material-symbols-outlined">settings</span>
+            <Settings className="w-5 h-5" />
             <span className="text-sm font-medium">System Settings</span>
           </button>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 rounded-lg text-[#ffb4ab] hover:bg-[#93000a]/10 hover:text-[#ffb4ab] transition-colors w-full text-left"
           >
-            <span className="material-symbols-outlined">logout</span>
+            <LogOut className="w-5 h-5" />
             <span className="text-sm font-medium">Sign Out</span>
           </button>
         </div>
@@ -124,16 +115,14 @@ const AdminLayout: React.FC = () => {
           {/* Logo only on mobile */}
           <div className="flex items-center gap-3 md:hidden">
             <div className="w-8 h-8 rounded-lg bg-[#4edea3]/20 flex items-center justify-center">
-              <span className="material-symbols-outlined text-[#4edea3] text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                eco
-              </span>
+              <Sprout className="text-[#4edea3] w-5 h-5" />
             </div>
             <h1 className="text-lg font-bold text-[#4edea3]">Grovi</h1>
           </div>
 
           {/* Search bar - hidden on mobile to avoid overcrowding */}
           <div className="hidden md:flex items-center w-full max-w-md relative focus-within:ring-2 focus-within:ring-[#4edea3] rounded-lg">
-            <span className="material-symbols-outlined absolute left-3 text-[#bbcabf] pointer-events-none">search</span>
+            <Search className="w-4 h-4 absolute left-3 text-[#bbcabf] pointer-events-none" />
             <input
               className="w-full bg-[#171f33]/50 border border-white/10 rounded-lg py-2 pl-10 pr-4 text-sm text-[#dae2fd] placeholder-[#bbcabf] focus:outline-none focus:border-[#4edea3]/50 transition-colors"
               placeholder="ค้นหาแปลง, เกษตรกร, หรือเซ็นเซอร์..."
@@ -149,7 +138,7 @@ const AdminLayout: React.FC = () => {
               className="w-10 h-10 rounded-lg flex items-center justify-center text-[#bbcabf] hover:text-[#4edea3] hover:bg-[#31394d]/50 transition-colors relative"
               onClick={() => alert("ระบบแจ้งเตือนหลักได้รับการยืนยันแล้ว")}
             >
-              <span className="material-symbols-outlined">notifications</span>
+              <Bell className="w-5 h-5" />
               <span className="absolute top-2 right-2 w-2 h-2 bg-[#ffb4ab] rounded-full ring-2 ring-[#0b1326]"></span>
             </button>
             <div className="h-8 w-px bg-white/10 mx-2"></div>
@@ -171,7 +160,7 @@ const AdminLayout: React.FC = () => {
               className="md:hidden flex items-center justify-center text-[#ffb4ab] hover:bg-[#93000a]/10 p-2 rounded-lg transition-colors"
               title="Sign Out"
             >
-              <span className="material-symbols-outlined">logout</span>
+              <LogOut className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -190,9 +179,7 @@ const AdminLayout: React.FC = () => {
             }`}
           >
             <div className={`w-10 h-8 flex items-center justify-center rounded-full mb-0.5 ${isActive("/admin/dashboard") ? "bg-[#4edea3]/20" : ""}`}>
-              <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: isActive("/admin/dashboard") ? "'FILL' 1" : undefined }}>
-                dashboard
-              </span>
+              <LayoutDashboard className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-medium font-sans">Overview</span>
           </Link>
@@ -204,9 +191,7 @@ const AdminLayout: React.FC = () => {
             }`}
           >
             <div className={`w-10 h-8 flex items-center justify-center rounded-full mb-0.5 ${isActive("/admin/fields") ? "bg-[#4edea3]/20" : ""}`}>
-              <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: isActive("/admin/fields") ? "'FILL' 1" : undefined }}>
-                agriculture
-              </span>
+              <Tractor className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-medium font-sans">Fields</span>
           </Link>
@@ -218,9 +203,7 @@ const AdminLayout: React.FC = () => {
             }`}
           >
             <div className={`w-10 h-8 flex items-center justify-center rounded-full mb-0.5 ${isActive("/admin/users") ? "bg-[#4edea3]/20" : ""}`}>
-              <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: isActive("/admin/users") ? "'FILL' 1" : undefined }}>
-                group
-              </span>
+              <Users className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-medium font-sans">Users</span>
           </Link>
@@ -232,9 +215,7 @@ const AdminLayout: React.FC = () => {
             }`}
           >
             <div className={`w-10 h-8 flex items-center justify-center rounded-full mb-0.5 ${isActive("/admin/alerts") ? "bg-[#4edea3]/20" : ""}`}>
-              <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: isActive("/admin/alerts") ? "'FILL' 1" : undefined }}>
-                notifications_active
-              </span>
+              <BellRing className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-medium font-sans">Alerts</span>
           </Link>

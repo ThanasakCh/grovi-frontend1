@@ -18,6 +18,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  LayoutGrid,
+  TrendingUp,
+  Map,
+  Sprout,
+  AlertTriangle,
+  Layers,
+  Filter,
+  Plus,
+  Minus,
+  AlertCircle,
+  Info,
+  PlusSquare,
+  Satellite,
+  LogIn,
+  FileText
+} from "lucide-react";
 
 const AdminDashboardPage: React.FC = () => {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
@@ -269,7 +286,7 @@ const AdminDashboardPage: React.FC = () => {
             to="/admin/fields"
             className="bg-[#4edea3]/10 hover:bg-[#4edea3]/20 text-[#4edea3] border border-[#4edea3]/20 px-4 py-2 rounded-lg flex items-center gap-2 text-xs font-semibold transition-colors"
           >
-            <span className="material-symbols-outlined text-[16px]">grid_view</span>
+            <LayoutGrid className="w-4 h-4" />
             ดูแปลงทั้งหมด
           </Link>
         </div>
@@ -282,10 +299,10 @@ const AdminDashboardPage: React.FC = () => {
           <div className="absolute top-0 right-0 w-20 h-20 bg-[#4edea3]/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
           <div className="flex justify-between items-start mb-4">
             <div className="w-9 h-9 rounded-lg bg-[#171f33] flex items-center justify-center text-[#4edea3]">
-              <span className="material-symbols-outlined">grid_view</span>
+              <LayoutGrid className="w-5 h-5" />
             </div>
             <span className="flex items-center gap-0.5 text-[#4edea3] text-[10px] bg-[#4edea3]/10 px-2 py-0.5 rounded-full font-bold">
-              <span className="material-symbols-outlined text-[12px] font-bold">trending_up</span> 12%
+              <TrendingUp className="w-3 h-3" /> 12%
             </span>
           </div>
           <p className="text-xs text-[#bbcabf] mb-1">จำนวนแปลงทั้งหมด</p>
@@ -297,7 +314,7 @@ const AdminDashboardPage: React.FC = () => {
           <div className="absolute top-0 right-0 w-20 h-20 bg-[#adc6ff]/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
           <div className="flex justify-between items-start mb-4">
             <div className="w-9 h-9 rounded-lg bg-[#171f33] flex items-center justify-center text-[#adc6ff]">
-              <span className="material-symbols-outlined">map</span>
+              <Map className="w-5 h-5" />
             </div>
           </div>
           <p className="text-xs text-[#bbcabf] mb-1">พื้นที่รวม (Rai)</p>
@@ -309,10 +326,10 @@ const AdminDashboardPage: React.FC = () => {
           <div className="absolute top-0 right-0 w-20 h-20 bg-[#4edea3]/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
           <div className="flex justify-between items-start mb-4">
             <div className="w-9 h-9 rounded-lg bg-[#171f33] flex items-center justify-center text-[#4edea3]">
-              <span className="material-symbols-outlined">psychiatry</span>
+              <Sprout className="w-5 h-5" />
             </div>
             <span className="flex items-center gap-0.5 text-[#4edea3] text-[10px] bg-[#4edea3]/10 px-2 py-0.5 rounded-full font-bold">
-              <span className="material-symbols-outlined text-[12px] font-bold">trending_up</span> 0.05
+              <TrendingUp className="w-3 h-3" /> 0.05
             </span>
           </div>
           <p className="text-xs text-[#bbcabf] mb-1">ค่าเฉลี่ย NDVI</p>
@@ -325,10 +342,10 @@ const AdminDashboardPage: React.FC = () => {
           <div className="absolute top-0 right-0 w-20 h-20 bg-[#EF4444]/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
           <div className="flex justify-between items-start mb-4">
             <div className="w-9 h-9 rounded-lg bg-[#EF4444]/20 flex items-center justify-center text-[#EF4444]">
-              <span className="material-symbols-outlined">warning</span>
+              <AlertTriangle className="w-5 h-5" />
             </div>
             <span className="flex items-center gap-0.5 text-[#EF4444] text-[10px] bg-[#EF4444]/10 px-2 py-0.5 rounded-full font-bold">
-              <span className="material-symbols-outlined text-[12px] font-bold">trending_up</span> 1
+              <TrendingUp className="w-3 h-3" /> 1
             </span>
           </div>
           <p className="text-xs text-[#bbcabf] mb-1">แปลงที่ต้องดูแลด่วน</p>
@@ -350,14 +367,14 @@ const AdminDashboardPage: React.FC = () => {
                   onClick={() => alert("สลับชั้นข้อมูล (Layers) อยู่ระหว่างพัฒนา")}
                   title="Layers"
                 >
-                  <span className="material-symbols-outlined text-[18px]">layers</span>
+                  <Layers className="w-4 h-4" />
                 </button>
                 <button 
                   className="w-8 h-8 rounded bg-[#171f33] flex items-center justify-center text-[#dae2fd] hover:text-[#4edea3] transition-colors border border-white/10" 
                   onClick={() => alert("กรองข้อมูลแปลงอยู่ระหว่างพัฒนา")}
                   title="Filter"
                 >
-                  <span className="material-symbols-outlined text-[18px]">filter_list</span>
+                  <Filter className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -377,13 +394,13 @@ const AdminDashboardPage: React.FC = () => {
                 className="w-8 h-8 rounded-lg bg-[#0b1326]/90 border border-white/10 flex items-center justify-center text-[#dae2fd] hover:text-[#4edea3] transition-colors backdrop-blur-md" 
                 onClick={() => alert("ฟังก์ชันขยายแผนที่")}
               >
-                <span className="material-symbols-outlined text-[20px]">add</span>
+                <Plus className="w-5 h-5" />
               </button>
               <button 
                 className="w-8 h-8 rounded-lg bg-[#0b1326]/90 border border-white/10 flex items-center justify-center text-[#dae2fd] hover:text-[#4edea3] transition-colors backdrop-blur-md" 
                 onClick={() => alert("ฟังก์ชันย่อแผนที่")}
               >
-                <span className="material-symbols-outlined text-[20px]">remove</span>
+                <Minus className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -442,13 +459,17 @@ const AdminDashboardPage: React.FC = () => {
                   return (
                     <div key={i} className={`border rounded-lg p-3 flex gap-3 items-start ${severityStyle}`}>
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${badgeColor}/20`}>
-                        <span className="material-symbols-outlined text-[16px]">
-                          {alert.severity === "critical" ? "error" : alert.severity === "warning" ? "warning" : "info"}
-                        </span>
+                        {alert.severity === "critical" ? (
+                          <AlertCircle className="w-4 h-4" />
+                        ) : alert.severity === "warning" ? (
+                          <AlertTriangle className="w-4 h-4" />
+                        ) : (
+                          <Info className="w-4 h-4" />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
-                          <h4 className="text-xs font-semibold truncate text-white">{alert.field_name}</h4>
+                           <h4 className="text-xs font-semibold truncate text-white">{alert.field_name}</h4>
                           <span className="text-[9px] text-[#bbcabf] whitespace-nowrap ml-1">
                             {alert.days_since_analysis ? `${alert.days_since_analysis}d ago` : "new"}
                           </span>
@@ -468,11 +489,15 @@ const AdminDashboardPage: React.FC = () => {
                 activities.map((act, i) => (
                   <div key={i} className="bg-[#171f33]/40 border border-white/5 rounded-lg p-3 flex gap-3 items-start hover:bg-[#171f33]/60 transition-colors">
                     <div className="w-8 h-8 rounded-full bg-[#4edea3]/10 flex items-center justify-center text-[#4edea3] shrink-0 mt-0.5">
-                      <span className="material-symbols-outlined text-[16px]">
-                        {act.action_type === "create_field" ? "add_box" : 
-                         act.action_type === "analyze_vi" ? "satellite_alt" :
-                         act.action_type === "login" ? "login" : "article"}
-                      </span>
+                      {act.action_type === "create_field" ? (
+                        <PlusSquare className="w-4 h-4" />
+                      ) : act.action_type === "analyze_vi" ? (
+                        <Satellite className="w-4 h-4" />
+                      ) : act.action_type === "login" ? (
+                        <LogIn className="w-4 h-4" />
+                      ) : (
+                        <FileText className="w-4 h-4" />
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start">

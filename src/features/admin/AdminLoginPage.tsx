@@ -2,6 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminLogin } from './services/adminApi';
 import './AdminLoginPage.css';
+import {
+  Satellite,
+  Sprout,
+  Activity,
+  AlertTriangle,
+  Tractor,
+  User,
+  Lock,
+  Eye,
+  EyeOff,
+  ShieldAlert,
+  ArrowRight,
+  ShieldCheck
+} from "lucide-react";
 
 const AdminLoginPage: React.FC = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
@@ -41,7 +55,7 @@ const AdminLoginPage: React.FC = () => {
         <div className="login-showcase-panel">
           <div className="showcase-content">
             <div className="showcase-badge">
-              <span className="material-symbols-outlined icon-spin">satellite_alt</span>
+              <Satellite className="w-4 h-4 icon-spin" />
               <span>Grovi Satellite Systems v2.4</span>
             </div>
             
@@ -58,7 +72,7 @@ const AdminLoginPage: React.FC = () => {
             <div className="telemetry-widgets">
               <div className="telemetry-card">
                 <div className="telemetry-icon green">
-                  <span className="material-symbols-outlined">psychiatry</span>
+                  <Sprout className="w-5 h-5" />
                 </div>
                 <div className="telemetry-info">
                   <span className="telemetry-label">ความสมบูรณ์เฉลี่ย</span>
@@ -68,7 +82,7 @@ const AdminLoginPage: React.FC = () => {
 
               <div className="telemetry-card">
                 <div className="telemetry-icon cyan">
-                  <span className="material-symbols-outlined">monitoring</span>
+                  <Activity className="w-5 h-5" />
                 </div>
                 <div className="telemetry-info">
                   <span className="telemetry-label">พื้นที่วิเคราะห์ผล</span>
@@ -78,7 +92,7 @@ const AdminLoginPage: React.FC = () => {
 
               <div className="telemetry-card">
                 <div className="telemetry-icon orange">
-                  <span className="material-symbols-outlined">warning</span>
+                  <AlertTriangle className="w-5 h-5" />
                 </div>
                 <div className="telemetry-info">
                   <span className="telemetry-label">ตรวจพบความแห้งแล้ง</span>
@@ -104,7 +118,7 @@ const AdminLoginPage: React.FC = () => {
             <header className="login-card-header">
               <div className="logo-glow-wrapper">
                 <div className="logo-badge">
-                  <span className="material-symbols-outlined">agriculture</span>
+                  <Tractor className="w-6 h-6" />
                 </div>
               </div>
               <h2 className="login-title">แผงควบคุมระบบ</h2>
@@ -116,7 +130,7 @@ const AdminLoginPage: React.FC = () => {
               <div className="input-group">
                 <label className="input-label" htmlFor="username">ชื่อผู้ใช้งาน หรือ อีเมล</label>
                 <div className="input-field-wrapper">
-                  <span className="material-symbols-outlined input-icon">person</span>
+                  <User className="input-icon" />
                   <input
                     className="login-input"
                     id="username"
@@ -135,7 +149,7 @@ const AdminLoginPage: React.FC = () => {
               <div className="input-group">
                 <label className="input-label" htmlFor="password">รหัสผ่าน</label>
                 <div className="input-field-wrapper">
-                  <span className="material-symbols-outlined input-icon">lock</span>
+                  <Lock className="input-icon" />
                   <input
                     className="login-input"
                     id="password"
@@ -151,9 +165,11 @@ const AdminLoginPage: React.FC = () => {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    <span className="material-symbols-outlined">
-                      {showPassword ? "visibility_off" : "visibility"}
-                    </span>
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
                   </button>
                   <span className="input-border-glow"></span>
                 </div>
@@ -162,7 +178,7 @@ const AdminLoginPage: React.FC = () => {
               {/* Error Alert Block */}
               {error && (
                 <div className="login-error-alert">
-                  <span className="material-symbols-outlined error-icon">gpp_maybe</span>
+                  <ShieldAlert className="error-icon" />
                   <div className="error-text">{error}</div>
                 </div>
               )}
@@ -181,7 +197,7 @@ const AdminLoginPage: React.FC = () => {
                 ) : (
                   <>
                     <span>เข้าสู่ระบบแดชบอร์ด</span>
-                    <span className="material-symbols-outlined btn-arrow">arrow_forward</span>
+                    <ArrowRight className="btn-arrow" />
                   </>
                 )}
               </button>
