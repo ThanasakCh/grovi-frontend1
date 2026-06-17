@@ -109,7 +109,7 @@ const AdminLayout: React.FC = () => {
       </nav>
 
       {/* Main Content Wrapper */}
-      <div className="flex-1 flex flex-col md:ml-[280px] min-h-screen bg-[#0b1326] relative pb-20 md:pb-0">
+      <div className="flex-1 flex flex-col md:ml-[280px] h-screen bg-[#0b1326] relative overflow-y-auto pb-20 md:pb-0">
         {/* Top App Bar (Desktop and Mobile) */}
         <div role="banner" className="h-16 flex justify-between items-center px-4 md:px-8 w-full bg-[#0b1326]/80 backdrop-blur-md border-b border-white/10 shadow-sm z-30 sticky top-0">
           {/* Logo only on mobile */}
