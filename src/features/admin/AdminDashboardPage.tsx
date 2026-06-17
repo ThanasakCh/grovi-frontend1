@@ -33,7 +33,9 @@ import {
   PlusSquare,
   Satellite,
   LogIn,
-  FileText
+  FileText,
+  RefreshCw,
+  Clock
 } from "lucide-react";
 
 const AdminDashboardPage: React.FC = () => {
@@ -46,6 +48,10 @@ const AdminDashboardPage: React.FC = () => {
   const [alerts, setAlerts] = useState<any[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [chartMounted, setChartMounted] = useState(false);
+  const [showMoreAlerts, setShowMoreAlerts] = useState(false);
+  const [showMoreActivities, setShowMoreActivities] = useState(false);
 
   // Map reference
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -60,7 +66,7 @@ const AdminDashboardPage: React.FC = () => {
           getFieldsHealth(),
           getVITrendAll("NDVI", "6m"),
           getDashboardAlerts(),
-          getActivityLog(6)
+          getActivityLog(10)
         ]);
 
         setSummary(sumData);
@@ -72,11 +78,41 @@ const AdminDashboardPage: React.FC = () => {
         console.error("Error loading dashboard data:", err);
       } finally {
         setLoading(false);
+        // Mount chart after data loads to avoid StrictMode crash
+        setTimeout(() => setChartMounted(true), 100);
       }
     };
 
     loadDashboardData();
+
+    // Auto-refresh alerts + activity log every 30 seconds
+    const interval = setInterval(async () => {
+      try {
+        const [alertsData, logsData] = await Promise.all([
+          getDashboardAlerts(),
+          getActivityLog(10)
+        ]);
+        setAlerts(alertsData);
+        setActivities(logsData);
+      } catch (err) { /* silent */ }
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const [alertsData, logsData] = await Promise.all([
+        getDashboardAlerts(),
+        getActivityLog(10)
+      ]);
+      setAlerts(alertsData);
+      setActivities(logsData);
+    } catch (err) { /* silent */ } finally {
+      setRefreshing(false);
+    }
+  };
 
   // Initialize Maplibre Map
   useEffect(() => {
@@ -423,8 +459,14 @@ const AdminDashboardPage: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-            {trendData && trendData.fields && trendData.fields.length > 0 ? (
-              <ReactEcharts option={getTrendChartOption()} style={{ height: "220px", width: "100%" }} />
+            {chartMounted && trendData && trendData.fields && trendData.fields.length > 0 ? (
+              <ReactEcharts
+                key="ndvi-trend-chart"
+                option={getTrendChartOption()}
+                style={{ height: "220px", width: "100%" }}
+                notMerge={true}
+                lazyUpdate={true}
+              />
             ) : (
               <div className="h-[220px] flex items-center justify-center border border-dashed border-white/10 rounded-lg text-xs text-[#bbcabf]">
                 ไม่มีข้อมูลแนวโน้มในช่วงนี้
@@ -437,9 +479,19 @@ const AdminDashboardPage: React.FC = () => {
         <div className="bg-[#1E293B]/60 backdrop-blur-xl border border-white/10 rounded-xl p-5 flex flex-col h-full max-h-[720px] overflow-hidden">
           <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/10">
             <h3 className="text-sm font-semibold text-white">Activity &amp; Alerts</h3>
-            <Link to="/admin/alerts" className="text-[#4edea3] hover:text-[#6ffbbe] text-xs font-semibold transition-colors">
-              View All
-            </Link>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="text-[#4edea3] hover:text-[#6ffbbe] transition-colors disabled:opacity-50"
+                title="รีเฟรชข้อมูล"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+              </button>
+              <Link to="/admin/alerts" className="text-[#4edea3] hover:text-[#6ffbbe] text-xs font-semibold transition-colors">
+                View All
+              </Link>
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 hide-scrollbar">
@@ -447,7 +499,7 @@ const AdminDashboardPage: React.FC = () => {
             {alerts.length > 0 && (
               <div className="space-y-3">
                 <p className="text-[10px] uppercase font-bold text-[#bbcabf] tracking-wider">Recent Alerts</p>
-                {alerts.slice(0, 3).map((alert, i) => {
+                {alerts.slice(0, showMoreAlerts ? alerts.length : 3).map((alert, i) => {
                   const severityStyle = 
                     alert.severity === "critical" ? "bg-[#EF4444]/10 border-[#EF4444]/20 text-[#ffb4ab]" :
                     alert.severity === "warning" ? "bg-[#F59E0B]/10 border-[#F59E0B]/20 text-[#f6db97]" :
@@ -469,51 +521,103 @@ const AdminDashboardPage: React.FC = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
-                           <h4 className="text-xs font-semibold truncate text-white">{alert.field_name}</h4>
-                          <span className="text-[9px] text-[#bbcabf] whitespace-nowrap ml-1">
-                            {alert.days_since_analysis ? `${alert.days_since_analysis}d ago` : "new"}
-                          </span>
+                          <h4 className="text-xs font-semibold truncate text-white">{alert.field_name}</h4>
                         </div>
                         <p className="text-xs text-[#bbcabf] mt-1 break-words">{alert.message}</p>
+                        <div className="mt-1.5 flex flex-col gap-0.5">
+                          {alert.snapshot_date && (
+                            <span className="text-[9px] text-[#bbcabf]/70 flex items-center gap-1">
+                              <Satellite className="w-2.5 h-2.5 shrink-0" />
+                              ข้อมูลดาวเทียม:{" "}
+                              {new Date(alert.snapshot_date).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" })}
+                            </span>
+                          )}
+                          {alert.created_at && (
+                            <span className="text-[9px] text-[#4edea3]/80 flex items-center gap-1">
+                              <Clock className="w-2.5 h-2.5 shrink-0" />
+                              วิเคราะห์เมื่อ:{" "}
+                              {new Date(alert.created_at).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" })}{" "}
+                              {new Date(alert.created_at).toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   );
                 })}
+                {alerts.length > 3 && (
+                  <button
+                    onClick={() => setShowMoreAlerts(p => !p)}
+                    className="w-full text-[10px] text-[#4edea3] hover:text-[#6ffbbe] py-1.5 flex items-center justify-center gap-1 transition-colors"
+                  >
+                    {showMoreAlerts ? (
+                      <>▴ เหลือน้อยลง</>
+                    ) : (
+                      <>▾ ดูทั้งหมด ({alerts.length - 3} รายการ)</>
+                    )}
+                  </button>
+                )}
               </div>
             )}
 
-            {/* Activities Section */}
             <div className="space-y-3 mt-6">
               <p className="text-[10px] uppercase font-bold text-[#bbcabf] tracking-wider">System Activity Log</p>
               {activities.length > 0 ? (
-                activities.map((act, i) => (
-                  <div key={i} className="bg-[#171f33]/40 border border-white/5 rounded-lg p-3 flex gap-3 items-start hover:bg-[#171f33]/60 transition-colors">
-                    <div className="w-8 h-8 rounded-full bg-[#4edea3]/10 flex items-center justify-center text-[#4edea3] shrink-0 mt-0.5">
-                      {act.action_type === "create_field" ? (
-                        <PlusSquare className="w-4 h-4" />
-                      ) : act.action_type === "analyze_vi" ? (
-                        <Satellite className="w-4 h-4" />
-                      ) : act.action_type === "login" ? (
-                        <LogIn className="w-4 h-4" />
-                      ) : (
-                        <FileText className="w-4 h-4" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-start">
-                        <h4 className="text-xs font-semibold text-white capitalize">
-                          {act.action_type.replace("_", " ")}
-                        </h4>
-                        <span className="text-[9px] text-[#bbcabf] whitespace-nowrap ml-1">
-                          {new Date(act.created_at).toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}
-                        </span>
+                <>
+                  {activities.slice(0, showMoreActivities ? activities.length : 4).map((act, i) => (
+                    <div key={i} className="bg-[#171f33]/40 border border-white/5 rounded-lg p-3 flex gap-3 items-start hover:bg-[#171f33]/60 transition-colors">
+                      <div className="w-8 h-8 rounded-full bg-[#4edea3]/10 flex items-center justify-center text-[#4edea3] shrink-0 mt-0.5">
+                        {act.action_type === "create_field" ? (
+                          <PlusSquare className="w-4 h-4" />
+                        ) : act.action_type === "analyze_vi" ? (
+                          <Satellite className="w-4 h-4" />
+                        ) : act.action_type === "login" ? (
+                          <LogIn className="w-4 h-4" />
+                        ) : (
+                          <FileText className="w-4 h-4" />
+                        )}
                       </div>
-                      <p className="text-xs text-[#bbcabf] mt-1 break-words">
-                        {act.description || `กิจกรรม ${act.action_type}`}
-                      </p>
+                      <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start">
+                            <h4 className="text-xs font-semibold text-white capitalize">
+                              {act.action_type === "login" ? "เข้าสู่ระบบ" :
+                               act.action_type === "register" ? "สมัครสมาชิก" :
+                               act.action_type === "create_field" ? "สร้างแปลงใหม่" :
+                               act.action_type === "update_field" ? "แก้ไขแปลง" :
+                               act.action_type === "delete_field" ? "ลบแปลง" :
+                               act.action_type === "analyze_vi" ? "วิเคราะห์ดาวเทียม" :
+                               act.action_type === "analyze_historical" ? "วิเคราะห์ย้อนหลัง" :
+                               act.action_type === "export_field" ? "ส่งออกแปลง" :
+                               act.action_type.replace(/_/g, " ")}
+                            </h4>
+                            <span className="text-[9px] text-[#bbcabf] whitespace-nowrap ml-1">
+                              {new Date(act.created_at).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" })}
+                              {" "}
+                              {new Date(act.created_at).toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#bbcabf] mt-1 break-words">
+                            {act.description || act.action_type}
+                          </p>
+                          {act.user_name && (
+                            <p className="text-[10px] text-[#4edea3]/70 mt-0.5">โดย: {act.user_name}</p>
+                          )}
+                      </div>
                     </div>
-                  </div>
-                ))
+                  ))}
+                  {activities.length > 4 && (
+                    <button
+                      onClick={() => setShowMoreActivities(p => !p)}
+                      className="w-full text-[10px] text-[#4edea3] hover:text-[#6ffbbe] py-1.5 flex items-center justify-center gap-1 transition-colors"
+                    >
+                      {showMoreActivities ? (
+                        <>▴ เหลือน้อยลง</>
+                      ) : (
+                        <>▾ ดูทั้งหมด ({activities.length - 4} รายการ)</>
+                      )}
+                    </button>
+                  )}
+                </>
               ) : (
                 <p className="text-xs text-[#bbcabf] text-center py-4">ไม่มีบันทึกกิจกรรมล่าสุด</p>
               )}

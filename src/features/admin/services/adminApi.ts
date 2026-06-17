@@ -112,3 +112,20 @@ export const deleteUser = async (userId: string) => {
   });
   return res.data;
 };
+
+// === Field Snapshots for Admin Details ===
+export const getFieldSnapshots = async (fieldId: string, viType: string = 'NDVI', limit: number = 4) => {
+  const res = await axios.get(`/vi-analysis/snapshots/${fieldId}`, {
+    headers: getAdminHeaders(),
+    params: { vi_type: viType, limit },
+  });
+  return res.data;
+};
+
+export const analyzeFieldHistorical = async (fieldId: string, viType: string = 'NDVI', count: number = 4) => {
+  const res = await axios.post(`/vi-analysis/${fieldId}/analyze-historical`, null, {
+    headers: getAdminHeaders(),
+    params: { vi_type: viType, count, clear_old: true },
+  });
+  return res.data;
+};

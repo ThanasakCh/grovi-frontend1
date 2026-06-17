@@ -15,6 +15,17 @@ const AdminLayout: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const rootEl = document.getElementById("root");
+    if (rootEl) {
+      const originalOverflow = rootEl.style.overflowY;
+      rootEl.style.overflowY = "hidden";
+      return () => {
+        rootEl.style.overflowY = originalOverflow;
+      };
+    }
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
     localStorage.removeItem("admin_name");
@@ -27,7 +38,7 @@ const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0b1326] text-[#dae2fd] min-h-screen flex font-sans overflow-x-hidden">
+    <div className="bg-[#0b1326] text-[#dae2fd] h-screen flex font-sans overflow-hidden">
       {/* Side Navigation (Desktop only, hidden on mobile) */}
       <nav className="hidden md:flex flex-col w-[280px] h-screen fixed left-0 top-0 bg-[#171f33]/80 backdrop-blur-xl border-r border-white/10 shadow-xl z-50 py-6 px-4">
         <div className="flex items-center gap-3 mb-8 px-2">
@@ -109,9 +120,9 @@ const AdminLayout: React.FC = () => {
       </nav>
 
       {/* Main Content Wrapper */}
-      <div className="flex-1 flex flex-col md:ml-[280px] h-screen bg-[#0b1326] relative overflow-y-auto pb-20 md:pb-0">
+      <div className="flex-1 min-w-0 flex flex-col md:ml-[280px] overflow-hidden bg-[#0b1326]">
         {/* Top App Bar (Desktop and Mobile) */}
-        <div role="banner" className="h-16 flex justify-between items-center px-4 md:px-8 w-full bg-[#0b1326]/80 backdrop-blur-md border-b border-white/10 shadow-sm z-30 sticky top-0">
+        <div role="banner" className="h-16 shrink-0 flex justify-between items-center px-4 md:px-8 bg-[#0b1326]/80 backdrop-blur-md border-b border-white/10 shadow-sm z-30">
           {/* Logo only on mobile */}
           <div className="flex items-center gap-3 md:hidden">
             <div className="w-8 h-8 rounded-lg bg-[#4edea3]/20 flex items-center justify-center">
@@ -163,10 +174,13 @@ const AdminLayout: React.FC = () => {
           </div>
         </div>
 
-        {/* Dynamic Inner Page Content */}
-        <main className="flex-grow p-4 md:p-8 max-w-7xl w-full mx-auto">
-          <Outlet context={{ searchQuery }} />
-        </main>
+        {/* Scrollable Container for Page Content */}
+        <div className="flex-grow overflow-y-auto pb-20 md:pb-0" style={{ scrollbarGutter: "stable" }}>
+          {/* Dynamic Inner Page Content */}
+          <main className="p-4 md:p-8 max-w-7xl w-full mx-auto">
+            <Outlet context={{ searchQuery }} />
+          </main>
+        </div>
 
         {/* Bottom Navigation Bar (Mobile only) */}
         <nav className="fixed bottom-0 w-full h-16 bg-[#0b1326]/90 backdrop-blur-lg border-t border-white/10 z-50 md:hidden flex justify-around items-center px-2 pb-safe shadow-lg">
