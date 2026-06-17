@@ -115,7 +115,7 @@ const AdminLoginPage: React.FC = () => {
         <div className="login-form-panel">
           <div className="login-glass-card">
             
-            <header className="login-card-header">
+            <div className="login-card-header">
               <div className="logo-glow-wrapper">
                 <div className="logo-badge">
                   <Tractor className="w-6 h-6" />
@@ -123,7 +123,7 @@ const AdminLoginPage: React.FC = () => {
               </div>
               <h2 className="login-title">แผงควบคุมระบบ</h2>
               <p className="login-subtitle">ลงชื่อเข้าใช้สำหรับผู้ดูแลระบบ Grovi</p>
-            </header>
+            </div>
 
             <form onSubmit={handleLogin} className="login-form">
               {/* Username Input */}
