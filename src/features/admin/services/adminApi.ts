@@ -91,6 +91,12 @@ export const getAllUsers = async (params?: {
   });
   return res.data;
 };
+export const createUser = async (userData: any) => {
+  const res = await axios.post('/dashboard/users', userData, {
+    headers: getAdminHeaders(),
+  });
+  return res.data;
+};
 
 export const updateUserRole = async (userId: string, role: string) => {
   const res = await axios.patch(`/dashboard/users/${userId}/role`, { role }, {

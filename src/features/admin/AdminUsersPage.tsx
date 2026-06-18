@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import { useOutletContext } from "react-router-dom";
 import {
   getAllUsers,
+  createUser,
   updateUserRole,
   updateUserStatus,
   deleteUser,
@@ -15,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { UserPlus, Users, UserCheck, Ban, Trash2, SearchX } from "lucide-react";
+import { UserPlus, Users, UserCheck, Ban, Trash2, SearchX, X } from "lucide-react";
 
 const AdminUsersPage: React.FC = () => {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
@@ -23,6 +24,17 @@ const AdminUsersPage: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  // Add User Modal State
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [newUserData, setNewUserData] = useState({
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+    role: "user"
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Filters
   const [selectedRole, setSelectedRole] = useState("all");
@@ -132,18 +144,46 @@ const AdminUsersPage: React.FC = () => {
     }
   };
 
-  const handleAddUserPlaceholder = () => {
-    Swal.fire({
-      title: "Add New User",
-      html: `
-        <div style="text-align:left; color:#bbcabf; font-family:sans-serif;" class="flex flex-col gap-3">
-          <p class="text-xs">ขณะนี้ส่วนต่อประสานสำหรับแอดมินแนะนำให้ผู้ใช้ทำการสมัครสมาชิกเองจากหน้าล็อคอินทั่วไป จากนั้นแอดมินจึงทำการยกระดับหรืออนุมัติสิทธิ์ (Admin / Staff / Farmer) ในแดชบอร์ดนี้</p>
-        </div>
-      `,
-      icon: "info",
-      confirmButtonColor: "#4edea3",
-      confirmButtonText: "รับทราบ"
+  const handleAddUserClick = () => {
+    setIsAddUserModalOpen(true);
+    setNewUserData({
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+      role: "user"
     });
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setIsSubmitting(true);
+      await createUser(newUserData);
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "สร้างผู้ใช้สำเร็จ",
+        showConfirmButton: false,
+        timer: 2000,
+        background: "#1E293B",
+        color: "#fff"
+      });
+      setIsAddUserModalOpen(false);
+      loadData();
+    } catch (err: any) {
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: err.response?.data?.detail || "ไม่สามารถสร้างผู้ใช้ได้",
+        confirmButtonColor: "#16a34a",
+        background: "#1E293B",
+        color: "#fff"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Filter & Search Logic
@@ -184,7 +224,7 @@ const AdminUsersPage: React.FC = () => {
           <p className="text-sm text-[#bbcabf] mt-1">จัดการบทบาท เปิด/ปิดใช้งาน และลบข้อมูลผู้ดูแลระบบและสมาชิกฟาร์ม</p>
         </div>
         <button
-          onClick={handleAddUserPlaceholder}
+          onClick={handleAddUserClick}
           className="flex items-center justify-center gap-2 bg-[#4edea3]/10 hover:bg-[#4edea3]/20 text-[#4edea3] border border-[#4edea3]/20 px-5 py-2.5 rounded-lg text-xs font-semibold transition-colors"
         >
           <UserPlus className="w-4.5 h-4.5" />
@@ -427,6 +467,121 @@ const AdminUsersPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Add User Modal */}
+      {isAddUserModalOpen && (
+        <div className="fixed inset-0 z-[100000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+          <div className="bg-[#171f33] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-[#1E293B]/50">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[#4edea3]/20 flex items-center justify-center text-[#4edea3]">
+                  <UserPlus className="w-4 h-4" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Add New User</h3>
+              </div>
+              <button 
+                onClick={() => setIsAddUserModalOpen(false)}
+                className="text-[#bbcabf] hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleCreateUser} className="p-6 flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#bbcabf]">ชื่อ-นามสกุล (Name)</label>
+                <input 
+                  type="text"
+                  required
+                  value={newUserData.name}
+                  onChange={(e) => setNewUserData({...newUserData, name: e.target.value})}
+                  className="w-full bg-[#0b1326] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#4edea3]/50 focus:ring-1 focus:ring-[#4edea3]/50 transition-all placeholder:text-[#bbcabf]/50"
+                  placeholder="เช่น สมชาย ใจดี"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#bbcabf]">ชื่อผู้ใช้ (Username)</label>
+                <input 
+                  type="text"
+                  required
+                  value={newUserData.username}
+                  onChange={(e) => setNewUserData({...newUserData, username: e.target.value})}
+                  className="w-full bg-[#0b1326] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#4edea3]/50 focus:ring-1 focus:ring-[#4edea3]/50 transition-all placeholder:text-[#bbcabf]/50"
+                  placeholder="เช่น somchai123"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#bbcabf]">อีเมล (Email)</label>
+                <input 
+                  type="email"
+                  required
+                  value={newUserData.email}
+                  onChange={(e) => setNewUserData({...newUserData, email: e.target.value})}
+                  className="w-full bg-[#0b1326] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#4edea3]/50 focus:ring-1 focus:ring-[#4edea3]/50 transition-all placeholder:text-[#bbcabf]/50"
+                  placeholder="เช่น somchai@example.com"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#bbcabf]">รหัสผ่าน (Password)</label>
+                <input 
+                  type="password"
+                  required
+                  minLength={6}
+                  value={newUserData.password}
+                  onChange={(e) => setNewUserData({...newUserData, password: e.target.value})}
+                  className="w-full bg-[#0b1326] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#4edea3]/50 focus:ring-1 focus:ring-[#4edea3]/50 transition-all placeholder:text-[#bbcabf]/50"
+                  placeholder="อย่างน้อย 6 ตัวอักษร"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#bbcabf]">บทบาท (Role)</label>
+                <Select
+                  value={newUserData.role}
+                  onValueChange={(value) => setNewUserData({...newUserData, role: value})}
+                >
+                  <SelectTrigger className="w-full bg-[#0b1326] border-white/10 text-white text-sm h-10 focus:ring-[#4edea3]/50 focus:border-[#4edea3]/50 outline-none">
+                    <SelectValue placeholder="เลือกบทบาท" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#171f33] border border-white/10 text-white z-[100001]">
+                    <SelectItem value="user" className="hover:bg-[#31394d]/50 focus:bg-[#31394d]/50 text-sm text-white">Normal User</SelectItem>
+                    <SelectItem value="farmer" className="hover:bg-[#31394d]/50 focus:bg-[#31394d]/50 text-sm text-white">Farmer</SelectItem>
+                    <SelectItem value="staff" className="hover:bg-[#31394d]/50 focus:bg-[#31394d]/50 text-sm text-white">Staff</SelectItem>
+                    <SelectItem value="admin" className="hover:bg-[#31394d]/50 focus:bg-[#31394d]/50 text-sm text-white text-[#4edea3] font-bold">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setIsAddUserModalOpen(false)}
+                  className="px-4 py-2 rounded-lg text-sm font-semibold text-[#bbcabf] hover:text-white hover:bg-white/5 transition-colors"
+                >
+                  ยกเลิก
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-5 py-2 rounded-lg text-sm font-bold bg-[#4edea3] text-[#0b1326] hover:bg-[#3bce93] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <div className="w-4 h-4 border-2 border-[#0b1326] border-t-transparent rounded-full animate-spin"></div>
+                  ) : null}
+                  ยืนยันการสร้าง
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
