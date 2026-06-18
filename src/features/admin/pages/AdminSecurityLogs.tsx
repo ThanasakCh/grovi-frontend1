@@ -76,7 +76,7 @@ const AdminSecurityLogs: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-white-900 dark:text-white flex items-center gap-2">
             <Shield className="w-6 h-6 text-indigo-500" />
             Security Audit Logs
           </h1>
