@@ -19,6 +19,8 @@ export const MOCK_USER = {
   email: "dev@example.com",
   created_at: new Date().toISOString(),
   is_active: true,
+  role: "admin",
+  perms: ["dashboard:view", "users:manage", "system:manage", "fields:manage", "analysis:create"],
 };
 
 // Mock token for development (used in API calls)
