@@ -175,7 +175,7 @@ const AdminLayout: React.FC = () => {
         </div>
 
         {/* Scrollable Container for Page Content */}
-        <div className="flex-grow overflow-y-auto pb-20 md:pb-0" style={{ scrollbarGutter: "stable" }}>
+        <div className="flex-grow overflow-y-auto" style={{ scrollbarGutter: "stable" }}>
           {/* Dynamic Inner Page Content */}
           <main className="p-4 md:p-8 max-w-7xl w-full mx-auto">
             <Outlet context={{ searchQuery }} />
@@ -183,7 +183,7 @@ const AdminLayout: React.FC = () => {
         </div>
 
         {/* Bottom Navigation Bar (Mobile only) */}
-        <nav className="fixed bottom-0 w-full h-16 bg-[#0b1326]/90 backdrop-blur-lg border-t border-white/10 z-50 md:hidden flex justify-around items-center px-2 pb-safe shadow-lg">
+        <nav className="w-full h-16 bg-[#0b1326]/90 backdrop-blur-lg border-t border-white/10 z-50 md:hidden flex justify-around items-center px-2 pb-safe shadow-lg shrink-0">
           <Link
             to="/admin/dashboard"
             className={`flex flex-col items-center justify-center w-16 h-full transition-colors ${
