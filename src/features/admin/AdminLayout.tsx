@@ -38,9 +38,9 @@ const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0b1326] text-[#dae2fd] h-screen h-[100dvh] flex font-sans overflow-hidden">
+    <div className="bg-[#0b1326] text-[#dae2fd] fixed inset-0 flex font-sans overflow-hidden">
       {/* Side Navigation (Desktop only, hidden on mobile) */}
-      <nav className="hidden md:flex flex-col w-[280px] h-screen fixed left-0 top-0 bg-[#171f33]/80 backdrop-blur-xl border-r border-white/10 shadow-xl z-50 py-6 px-4">
+      <nav className="hidden md:flex flex-col w-[280px] fixed inset-y-0 left-0 bg-[#171f33]/80 backdrop-blur-xl border-r border-white/10 shadow-xl z-50 py-6 px-4">
         <div className="flex items-center gap-3 mb-8 px-2">
           <div className="w-10 h-10 rounded-lg bg-[#4edea3]/20 flex items-center justify-center">
             <Sprout className="text-[#4edea3] w-6 h-6" />
@@ -183,7 +183,7 @@ const AdminLayout: React.FC = () => {
         </div>
 
         {/* Bottom Navigation Bar (Mobile only) */}
-        <nav className="w-full h-16 bg-[#0b1326]/90 backdrop-blur-lg border-t border-white/10 z-50 md:hidden flex justify-around items-center px-2 pb-safe shadow-lg shrink-0">
+        <nav className="w-full h-[calc(4rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)] bg-[#0b1326]/90 backdrop-blur-lg border-t border-white/10 z-50 md:hidden flex justify-around items-center px-2 shadow-lg shrink-0">
           <Link
             to="/admin/dashboard"
             className={`flex flex-col items-center justify-center w-16 h-full transition-colors ${
