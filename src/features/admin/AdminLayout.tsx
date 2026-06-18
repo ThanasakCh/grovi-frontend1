@@ -38,7 +38,7 @@ const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0b1326] text-[#dae2fd] h-screen flex font-sans overflow-hidden">
+    <div className="bg-[#0b1326] text-[#dae2fd] h-screen h-[100dvh] flex font-sans overflow-hidden">
       {/* Side Navigation (Desktop only, hidden on mobile) */}
       <nav className="hidden md:flex flex-col w-[280px] h-screen fixed left-0 top-0 bg-[#171f33]/80 backdrop-blur-xl border-r border-white/10 shadow-xl z-50 py-6 px-4">
         <div className="flex items-center gap-3 mb-8 px-2">
