@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { adminLogin } from './services/adminApi';
+import { useAuth } from '../../contexts/AuthContext';
 import './AdminLoginPage.css';
 import {
   Satellite,
@@ -23,6 +23,7 @@ const AdminLoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -30,13 +31,10 @@ const AdminLoginPage: React.FC = () => {
     setError('');
     setLoading(true);
     try {
-      const data = await adminLogin(usernameOrEmail, password);
-      localStorage.setItem('admin_token', data.access_token);
-      localStorage.setItem('admin_name', data.admin_name);
-      localStorage.setItem('admin_role', data.role);
+      await login(usernameOrEmail, password);
       navigate('/admin/dashboard');
     } catch (err: any) {
-      setError(err?.response?.data?.detail || 'เข้าสู่ระบบไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง');
+      setError(err.message || 'เข้าสู่ระบบไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง');
     } finally {
       setLoading(false);
     }

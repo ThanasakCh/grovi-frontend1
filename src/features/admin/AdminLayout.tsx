@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Sprout, LayoutDashboard, Tractor, Users, BellRing, Settings, LogOut, Search, Bell } from "lucide-react";
+import { Sprout, LayoutDashboard, Tractor, Users, BellRing, Settings, LogOut, Search, Bell, Shield } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const AdminLayout: React.FC = () => {
   const location = useLocation();
@@ -8,12 +9,13 @@ const AdminLayout: React.FC = () => {
   const [adminName, setAdminName] = useState("System Admin");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { user, logout } = useAuth();
+  
   useEffect(() => {
-    const name = localStorage.getItem("admin_name");
-    if (name) {
-      setAdminName(name);
+    if (user?.name) {
+      setAdminName(user.name);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const rootEl = document.getElementById("root");
@@ -26,10 +28,8 @@ const AdminLayout: React.FC = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("admin_token");
-    localStorage.removeItem("admin_name");
-    localStorage.removeItem("admin_role");
+  const handleLogout = async () => {
+    await logout();
     navigate("/admin/login");
   };
 
@@ -98,6 +98,18 @@ const AdminLayout: React.FC = () => {
           >
             <BellRing className="w-5 h-5" />
             <span className="text-sm font-medium">Alerts</span>
+          </Link>
+
+          <Link
+            to="/admin/security"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+              isActive("/admin/security")
+                ? "text-[#4edea3] font-bold border-r-2 border-[#4edea3] bg-[#4edea3]/10"
+                : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-[#dae2fd]"
+            }`}
+          >
+            <Shield className="w-5 h-5" />
+            <span className="text-sm font-medium">Security Logs</span>
           </Link>
         </div>
 
@@ -230,6 +242,18 @@ const AdminLayout: React.FC = () => {
               <BellRing className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-medium font-sans">Alerts</span>
+          </Link>
+
+          <Link
+            to="/admin/security"
+            className={`flex flex-col items-center justify-center w-16 h-full transition-colors ${
+              isActive("/admin/security") ? "text-[#4edea3]" : "text-[#bbcabf]"
+            }`}
+          >
+            <div className={`w-10 h-8 flex items-center justify-center rounded-full mb-0.5 ${isActive("/admin/security") ? "bg-[#4edea3]/20" : ""}`}>
+              <Shield className="w-5 h-5" />
+            </div>
+            <span className="text-[10px] font-medium font-sans">Security</span>
           </Link>
         </nav>
       </div>

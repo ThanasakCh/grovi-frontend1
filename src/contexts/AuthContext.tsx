@@ -17,6 +17,8 @@ interface User {
   created_at: string;
   is_active: boolean;
   profile_url?: string;
+  role: string;
+  perms: string[];
 }
 
 interface AuthContextType {
@@ -26,6 +28,7 @@ interface AuthContextType {
   login: (usernameOrEmail: string, password: string) => Promise<void>;
   register: (userData: RegisterData) => Promise<void>;
   logout: () => void;
+  hasPermission: (perm: string) => boolean;
 }
 
 interface RegisterData {
@@ -128,10 +131,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    delete axios.defaults.headers.common["Authorization"];
-    setUser(null);
+  const logout = async () => {
+    try {
+      await axios.post("/auth/logout");
+    } catch (error) {
+      console.error("Logout API failed:", error);
+    } finally {
+      localStorage.removeItem("token");
+      delete axios.defaults.headers.common["Authorization"];
+      setUser(null);
+    }
+  };
+
+  const hasPermission = (perm: string) => {
+    return user?.perms?.includes(perm) ?? false;
   };
 
   const value = {
@@ -141,6 +154,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     register,
     logout,
+    hasPermission,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
