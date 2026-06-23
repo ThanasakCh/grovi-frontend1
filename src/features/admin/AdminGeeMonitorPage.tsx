@@ -15,6 +15,7 @@ interface ViStatus {
   total_assets: number;
   north_asset: string;
   south_asset: string;
+  active_task_state?: string | null;
   error?: string;
 }
 interface AssetsInfo {
