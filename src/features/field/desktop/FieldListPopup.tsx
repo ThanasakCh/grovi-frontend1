@@ -17,6 +17,7 @@ import {
 import { useField } from "../../../contexts/FieldContext";
 import { useLanguage } from "../../../contexts/LanguageContext";
 import { useFieldActions } from "../../../hooks/useFieldActions";
+import { useAuth } from "../../../contexts/AuthContext";
 import Swal from "sweetalert2";
 
 // Custom VectorSquare Icon (matching Lucide vector-square)
@@ -128,6 +129,7 @@ export default function DesktopAnalysisMenuPopup({}: DesktopAnalysisMenuPopupPro
   const navigate = useNavigate();
   const { fields } = useField();
   const { t, language } = useLanguage();
+  const { isAuthenticated } = useAuth();
   const [isSelectPopupOpen, setIsSelectPopupOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortMode, setSortMode] = useState<"latest" | "name_asc" | "name_desc">(
@@ -140,7 +142,7 @@ export default function DesktopAnalysisMenuPopup({}: DesktopAnalysisMenuPopupPro
   // Thumbnails are now included in field data from API - no need to load separately
 
   const handleButtonClick = () => {
-    if (fields.length === 0) {
+    if (isAuthenticated && fields.length === 0) {
       Swal.fire({
         title: t("field.noFields"),
         text: t("field.createFirst"),
@@ -155,7 +157,7 @@ export default function DesktopAnalysisMenuPopup({}: DesktopAnalysisMenuPopupPro
 
   const handleFieldSelect = (fieldId: string) => {
     setIsSelectPopupOpen(false);
-    navigate(`/dris_project/field/${fieldId}`);
+    navigate(`/Grovi-cropmonitoring/field/${fieldId}`);
   };
 
   // UTM conversion function
@@ -322,234 +324,263 @@ export default function DesktopAnalysisMenuPopup({}: DesktopAnalysisMenuPopupPro
                 className="flex-1 overflow-y-auto px-4 py-4"
                 style={{ background: "#f8f9fa" }}
               >
-                {/* Search Bar */}
-                <div className="flex gap-3 mb-3">
-                  <div className="relative flex-1 group">
-                    <Search
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-600 transition-colors"
-                      size={18}
-                    />
-                    <input
-                      type="text"
-                      placeholder={t("field.searchPlaceholder")}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-3 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-all shadow-sm text-sm"
-                    />
-                  </div>
-                  <div className="relative">
+                {!isAuthenticated ? (
+                  <div className="flex flex-col items-center justify-center py-10 h-full">
+                    <p className="text-gray-600 mb-5 text-center text-[15px]">
+                      กรุณาเข้าสู่ระบบเพื่อใช้งานฟีเจอร์นี้
+                    </p>
                     <button
-                      onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                      className={`bg-white border rounded-lg w-11 h-full flex items-center justify-center transition-all shadow-sm ${
-                        isSortDropdownOpen
-                          ? "border-green-600 text-green-600"
-                          : "border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-green-600 hover:border-green-600"
-                      }`}
+                      onClick={() => {
+                        setIsSelectPopupOpen(false);
+                        navigate("/auth");
+                      }}
+                      className="flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all duration-200 hover:opacity-90 px-6"
+                      style={{
+                        padding: "12px 24px",
+                        background: "rgb(59, 130, 246)",
+                        border: "none",
+                        color: "white",
+                        fontSize: "15px",
+                        fontWeight: 600,
+                      }}
                     >
-                      <ArrowUpDown size={18} />
+                      เข้าสู่ระบบ
                     </button>
-
-                    {/* Sort Dropdown */}
-                    {isSortDropdownOpen && (
-                      <>
-                        <div
-                          className="fixed inset-0 z-[10001]"
-                          onClick={() => setIsSortDropdownOpen(false)}
-                        />
-                        <div className="absolute right-0 top-full mt-2 z-[10002] bg-white rounded-xl shadow-lg border border-gray-100 py-2 min-w-[220px]">
-                          {sortOptions.map((option) => (
-                            <button
-                              key={option.value}
-                              onClick={() => {
-                                setSortMode(option.value as typeof sortMode);
-                                setIsSortDropdownOpen(false);
-                              }}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                                sortMode === option.value
-                                  ? "text-green-600 bg-green-50 font-medium"
-                                  : "text-gray-700 hover:bg-gray-50"
-                              }`}
-                            >
-                              {option.label}
-                            </button>
-                          ))}
-                        </div>
-                      </>
-                    )}
                   </div>
-                </div>
+                ) : (
+                  <>
+                    {/* Search Bar */}
+                    <div className="flex gap-3 mb-3">
+                      <div className="relative flex-1 group">
+                        <Search
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-600 transition-colors"
+                          size={18}
+                        />
+                        <input
+                          type="text"
+                          placeholder={t("field.searchPlaceholder")}
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="w-full pl-10 pr-3 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-all shadow-sm text-sm"
+                        />
+                      </div>
+                      <div className="relative">
+                        <button
+                          onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                          className={`bg-white border rounded-lg w-11 h-full flex items-center justify-center transition-all shadow-sm ${
+                            isSortDropdownOpen
+                              ? "border-green-600 text-green-600"
+                              : "border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-green-600 hover:border-green-600"
+                          }`}
+                        >
+                          <ArrowUpDown size={18} />
+                        </button>
 
-                {/* Count Label */}
-                <div className="flex justify-between items-end text-xs text-gray-500 px-1 mb-3 font-medium">
-                  <span>{t("field.allFields")}</span>
-                  <span className="text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
-                    ({filteredFields.length}) {t("field.unit")}
-                  </span>
-                </div>
-
-                {/* List Items */}
-                <div className="space-y-4 pb-2">
-                  {filteredFields.map((field) => (
-                    <div
-                      key={field.id}
-                      onClick={() => handleFieldSelect(field.id)}
-                      className="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex gap-4 hover:shadow-md transition-shadow group cursor-pointer"
-                    >
-                      {/* Left: Map Thumbnail */}
-                      <div className="w-[100px] h-[100px] shrink-0 relative rounded-xl overflow-hidden bg-gray-200 shadow-inner border border-gray-100">
-                        {field.thumbnail ? (
-                          <img
-                            src={field.thumbnail}
-                            alt="Map"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                            <MapPin size={24} className="text-green-400" />
-                          </div>
+                        {/* Sort Dropdown */}
+                        {isSortDropdownOpen && (
+                          <>
+                            <div
+                              className="fixed inset-0 z-[10001]"
+                              onClick={() => setIsSortDropdownOpen(false)}
+                            />
+                            <div className="absolute right-0 top-full mt-2 z-[10002] bg-white rounded-xl shadow-lg border border-gray-100 py-2 min-w-[220px]">
+                              {sortOptions.map((option) => (
+                                <button
+                                  key={option.value}
+                                  onClick={() => {
+                                    setSortMode(option.value as typeof sortMode);
+                                    setIsSortDropdownOpen(false);
+                                  }}
+                                  className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                                    sortMode === option.value
+                                      ? "text-green-600 bg-green-50 font-medium"
+                                      : "text-gray-700 hover:bg-gray-50"
+                                  }`}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          </>
                         )}
                       </div>
+                    </div>
 
-                      {/* Right: Info */}
-                      <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
-                        {/* Header: Title & Actions */}
-                        <div className="flex justify-between items-start mb-1">
-                          <h3 className="font-bold text-gray-800 text-[15px] truncate pr-2 flex-1 leading-tight">
-                            {field.name}
-                          </h3>
+                    {/* Count Label */}
+                    <div className="flex justify-between items-end text-xs text-gray-500 px-1 mb-3 font-medium">
+                      <span>{t("field.allFields")}</span>
+                      <span className="text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                        ({filteredFields.length}) {t("field.unit")}
+                      </span>
+                    </div>
 
-                          {/* Action Buttons */}
-                          <FieldActionButtons field={field} />
-                        </div>
-
-                        {/* Info Rows */}
-                        <div className="space-y-1.5">
-                          {/* Area Size */}
-                          <div className="flex items-center justify-between text-xs text-gray-600">
-                            <div className="flex items-center flex-1 min-w-0">
-                              <div className="w-5 flex justify-center shrink-0">
-                                <VectorSquareIcon size={14} color="#F6B010" />
+                    {/* List Items */}
+                    <div className="space-y-4 pb-2">
+                      {filteredFields.map((field) => (
+                        <div
+                          key={field.id}
+                          onClick={() => handleFieldSelect(field.id)}
+                          className="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex gap-4 hover:shadow-md transition-shadow group cursor-pointer"
+                        >
+                          {/* Left: Map Thumbnail */}
+                          <div className="w-[100px] h-[100px] shrink-0 relative rounded-xl overflow-hidden bg-gray-200 shadow-inner border border-gray-100">
+                            {field.thumbnail ? (
+                              <img
+                                src={field.thumbnail}
+                                alt="Map"
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                                <MapPin size={24} className="text-green-400" />
                               </div>
-                              <span className="truncate flex-1 font-medium text-gray-700 ml-1">
-                                {showAreaInSqm
-                                  ? `${(field.area_m2 || 0).toFixed(2)} ${t(
-                                      "unit.sqm",
-                                    )}`
-                                  : formatArea(field.area_m2)}
-                              </span>
-                            </div>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setShowAreaInSqm(!showAreaInSqm);
-                              }}
-                              className="text-gray-400 hover:text-green-600 transition-colors shrink-0 ml-1"
-                              title={
-                                showAreaInSqm
-                                  ? t("unit.changeToRai")
-                                  : t("unit.changeToSqm")
-                              }
-                            >
-                              <RefreshCw size={11} />
-                            </button>
+                            )}
                           </div>
 
-                          {/* Location */}
-                          <div className="flex items-center text-xs text-gray-600">
-                            <div className="w-5 flex justify-center shrink-0">
-                              <MapPin size={14} style={{ color: "#F6B010" }} />
-                            </div>
-                            <span className="truncate flex-1 ml-1">
-                              {(language === "EN"
-                                ? field.address_en
-                                : field.address) || t("field.noAddress")}
-                            </span>
-                          </div>
+                          {/* Right: Info */}
+                          <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                            {/* Header: Title & Actions */}
+                            <div className="flex justify-between items-start mb-1">
+                              <h3 className="font-bold text-gray-800 text-[15px] truncate pr-2 flex-1 leading-tight">
+                                {field.name}
+                              </h3>
 
-                          {/* Coords */}
-                          <div className="flex items-center justify-between text-xs text-gray-600">
-                            <div className="flex items-center flex-1 min-w-0">
-                              <div className="w-5 flex justify-center shrink-0">
-                                <LocateFixed
-                                  size={14}
-                                  style={{ color: "#F6B010" }}
-                                />
+                              {/* Action Buttons */}
+                              <FieldActionButtons field={field} />
+                            </div>
+
+                            {/* Info Rows */}
+                            <div className="space-y-1.5">
+                              {/* Area Size */}
+                              <div className="flex items-center justify-between text-xs text-gray-600">
+                                <div className="flex items-center flex-1 min-w-0">
+                                  <div className="w-5 flex justify-center shrink-0">
+                                    <VectorSquareIcon size={14} color="#F6B010" />
+                                  </div>
+                                  <span className="truncate flex-1 font-medium text-gray-700 ml-1">
+                                    {showAreaInSqm
+                                      ? `${(field.area_m2 || 0).toFixed(2)} ${t(
+                                          "unit.sqm",
+                                        )}`
+                                      : formatArea(field.area_m2)}
+                                  </span>
+                                </div>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowAreaInSqm(!showAreaInSqm);
+                                  }}
+                                  className="text-gray-400 hover:text-green-600 transition-colors shrink-0 ml-1"
+                                  title={
+                                    showAreaInSqm
+                                      ? t("unit.changeToRai")
+                                      : t("unit.changeToSqm")
+                                  }
+                                >
+                                  <RefreshCw size={11} />
+                                </button>
                               </div>
-                              <span className="truncate flex-1 font-mono text-[11px] ml-1">
-                                {showCoordsInUTM
-                                  ? (() => {
+
+                              {/* Location */}
+                              <div className="flex items-center text-xs text-gray-600">
+                                <div className="w-5 flex justify-center shrink-0">
+                                  <MapPin size={14} style={{ color: "#F6B010" }} />
+                                </div>
+                                <span className="truncate flex-1 ml-1">
+                                  {(language === "EN"
+                                    ? field.address_en
+                                    : field.address) || t("field.noAddress")}
+                                </span>
+                              </div>
+
+                              {/* Coords */}
+                              <div className="flex items-center justify-between text-xs text-gray-600">
+                                <div className="flex items-center flex-1 min-w-0">
+                                  <div className="w-5 flex justify-center shrink-0">
+                                    <LocateFixed
+                                      size={14}
+                                      style={{ color: "#F6B010" }}
+                                    />
+                                  </div>
+                                  <span className="truncate flex-1 font-mono text-[11px] ml-1">
+                                    {showCoordsInUTM
+                                      ? (() => {
+                                          const utm = latLngToUTM(
+                                            field.centroid_lat,
+                                            field.centroid_lng,
+                                          );
+                                          return `${utm.zone}${utm.hemisphere} ${utm.easting}E ${utm.northing}N`;
+                                        })()
+                                      : `${field.centroid_lat?.toFixed(
+                                          4,
+                                        )} ${field.centroid_lng?.toFixed(4)}`}
+                                  </span>
+                                </div>
+                                <div className="flex gap-1 shrink-0">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
                                       const utm = latLngToUTM(
                                         field.centroid_lat,
                                         field.centroid_lng,
                                       );
-                                      return `${utm.zone}${utm.hemisphere} ${utm.easting}E ${utm.northing}N`;
-                                    })()
-                                  : `${field.centroid_lat?.toFixed(
-                                      4,
-                                    )} ${field.centroid_lng?.toFixed(4)}`}
-                              </span>
-                            </div>
-                            <div className="flex gap-1 shrink-0">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  const utm = latLngToUTM(
-                                    field.centroid_lat,
-                                    field.centroid_lng,
-                                  );
-                                  const textToCopy = showCoordsInUTM
-                                    ? `${utm.zone}${utm.hemisphere} ${utm.easting}E ${utm.northing}N`
-                                    : `${field.centroid_lat}, ${field.centroid_lng}`;
-                                  navigator.clipboard.writeText(textToCopy);
-                                  Swal.fire({
-                                    title: t("action.copied"),
-                                    icon: "success",
-                                    timer: 1000,
-                                    showConfirmButton: false,
-                                    position: "top-end",
-                                    toast: true,
-                                  });
-                                }}
-                                className="text-gray-400 hover:text-green-600 transition-colors"
-                              >
-                                <Copy size={11} />
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setShowCoordsInUTM(!showCoordsInUTM);
-                                }}
-                                className="text-gray-400 hover:text-green-600 transition-colors"
-                                title={
-                                  showCoordsInUTM
-                                    ? t("unit.changeToLatLng")
-                                    : t("unit.changeToUTM")
-                                }
-                              >
-                                <RefreshCw size={11} />
-                              </button>
+                                      const textToCopy = showCoordsInUTM
+                                        ? `${utm.zone}${utm.hemisphere} ${utm.easting}E ${utm.northing}N`
+                                        : `${field.centroid_lat}, ${field.centroid_lng}`;
+                                      navigator.clipboard.writeText(textToCopy);
+                                      Swal.fire({
+                                        title: t("action.copied"),
+                                        icon: "success",
+                                        timer: 1000,
+                                        showConfirmButton: false,
+                                        position: "top-end",
+                                        toast: true,
+                                      });
+                                    }}
+                                    className="text-gray-400 hover:text-green-600 transition-colors"
+                                  >
+                                    <Copy size={11} />
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setShowCoordsInUTM(!showCoordsInUTM);
+                                    }}
+                                    className="text-gray-400 hover:text-green-600 transition-colors"
+                                    title={
+                                      showCoordsInUTM
+                                        ? t("unit.changeToLatLng")
+                                        : t("unit.changeToUTM")
+                                    }
+                                  >
+                                    <RefreshCw size={11} />
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                      ))}
 
-                  {filteredFields.length === 0 && (
-                    <div className="text-center py-8 text-gray-400 text-sm">
-                      {t("field.notFound")}
+                      {filteredFields.length === 0 && (
+                        <div className="text-center py-8 text-gray-400 text-sm">
+                          {t("field.notFound")}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </>
+                )}
               </div>
 
               {/* Footer */}
-              <div
-                className="bg-white border-t border-gray-100 p-3 text-center text-xs text-gray-400"
-                style={{ boxShadow: "0 -4px 10px rgba(0,0,0,0.02)" }}
-              >
-                {t("field.total")} {fields.length} {t("field.unit")}
-              </div>
+              {isAuthenticated && (
+                <div
+                  className="bg-white border-t border-gray-100 p-3 text-center text-xs text-gray-400"
+                  style={{ boxShadow: "0 -4px 10px rgba(0,0,0,0.02)" }}
+                >
+                  {t("field.total")} {fields.length} {t("field.unit")}
+                </div>
+              )}
             </div>
           </>,
           document.body,

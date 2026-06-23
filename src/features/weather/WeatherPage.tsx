@@ -23,7 +23,7 @@ export default function WeatherPage() {
 
   useEffect(() => {
     if (!fieldId) {
-      navigate("/dris_project");
+      navigate("/Grovi-cropmonitoring");
       return;
     }
     loadField();
@@ -42,7 +42,7 @@ export default function WeatherPage() {
       await getField(fieldId);
     } catch (error) {
       console.error("Failed to load field:", error);
-      navigate("/dris_project");
+      navigate("/Grovi-cropmonitoring");
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +116,7 @@ export default function WeatherPage() {
 
   // Desktop → redirect to field detail
   if (isDesktop) {
-    navigate(`/dris_project/field/${fieldId}`, { replace: true });
+    navigate(`/Grovi-cropmonitoring/field/${fieldId}`, { replace: true });
     return null;
   }
 
@@ -156,7 +156,7 @@ export default function WeatherPage() {
         }}
       >
         <button
-          onClick={() => navigate(`/dris_project/field/${fieldId}`)}
+          onClick={() => navigate(`/Grovi-cropmonitoring/field/${fieldId}`)}
           className="w-9 h-9 rounded-full flex items-center justify-center mr-3 transition-colors"
           style={{ background: "rgba(255,255,255,0.2)" }}
         >

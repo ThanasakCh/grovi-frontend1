@@ -3,6 +3,7 @@ import { PanelLeft, Menu, Moon, Sun, LogOut } from "lucide-react";
 import profileImage from "../../../assets/profile.jpg";
 import { useLanguage } from "../../../contexts/LanguageContext";
 import { useAuth } from "../../../contexts/AuthContext";
+import Swal from "sweetalert2";
 
 interface TopHeaderProps {
   onMenuClick: () => void;
@@ -19,7 +20,7 @@ export default function TopHeader({
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
   const { language, toggleLanguage, t } = useLanguage();
-  const { user, logout } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,6 +36,18 @@ export default function TopHeader({
     if (onDarkModeToggle) {
       onDarkModeToggle(newDarkMode);
     }
+  };
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "ออกจากระบบสำเร็จ",
+      icon: "success",
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+    logout();
   };
 
   const buttonStyle = {
@@ -153,81 +166,107 @@ export default function TopHeader({
         </button>
 
         {/* Profile Dropdown */}
-        <div style={{ marginLeft: "10px" }} className="relative dropdown">
-          <button
-            className="flex items-center justify-center p-0 border-0 bg-transparent cursor-pointer"
-            onClick={() => setIsProfileOpen(!isProfileOpen)}
-            onBlur={() => setTimeout(() => setIsProfileOpen(false), 200)}
-          >
-            <img
-              src={profileImage}
-              alt="Profile"
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
-          </button>
-
-          {isProfileOpen && (
-            <div
-              className="absolute right-0 mt-2"
-              style={{
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(0, 0, 0, 0.1)",
-                color: "inherit",
-                boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 15px",
-                borderRadius: "12px",
-                padding: "0px",
-                minWidth: "220px",
-                marginTop: "8px",
-              }}
+        {isAuthenticated && (
+          <div style={{ marginLeft: "10px" }} className="relative dropdown">
+            <button
+              className="flex items-center justify-center p-0 border-0 bg-transparent cursor-pointer"
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+              onBlur={() => setTimeout(() => setIsProfileOpen(false), 200)}
             >
-              <div
-                style={{
-                  padding: "12px 16px",
-                  background: "transparent",
-                  borderBottom: "1px solid rgba(0, 0, 0, 0.08)",
-                }}
-              >
-                <h6
-                  className="mb-1"
+              {user?.role === "admin" ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
                   style={{
-                    color: "rgb(30, 41, 59)",
-                    fontWeight: 600,
-                    margin: 0,
-                    fontSize: "14px",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    backgroundColor: "rgba(59, 130, 246, 0.2)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "rgb(59, 130, 246)",
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    userSelect: "none",
                   }}
                 >
-                  {user?.name || t("user.defaultName")}
-                </h6>
-                <small
-                  style={{ color: "rgb(100, 116, 139)", fontSize: "12px" }}
-                >
-                  {user?.email || ""}
-                </small>
-              </div>
-              <button
-                className="w-full text-left flex items-center gap-2 hover:bg-black/5 transition-colors"
+                  {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+                </div>
+              )}
+            </button>
+
+            {isProfileOpen && (
+              <div
+                className="absolute right-0 mt-2"
                 style={{
-                  padding: "10px 16px",
-                  background: "transparent",
-                  color: "rgb(30, 41, 59)",
-                  borderRadius: "0px 0px 12px 12px",
-                  border: "none",
-                  cursor: "pointer",
+                  background: "rgba(255, 255, 255, 0.8)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(0, 0, 0, 0.1)",
+                  color: "inherit",
+                  boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 15px",
+                  borderRadius: "12px",
+                  padding: "0px",
+                  minWidth: "220px",
+                  marginTop: "8px",
                 }}
-                onClick={logout}
               >
-                <LogOut size={18} />
-                <span style={{ fontSize: "14px" }}>{t("header.logout")}</span>
-              </button>
-            </div>
-          )}
-        </div>
+                <div
+                  style={{
+                    padding: "12px 16px",
+                    background: "transparent",
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.08)",
+                  }}
+                >
+                  <h6
+                    className="mb-1"
+                    style={{
+                      color: "rgb(30, 41, 59)",
+                      fontWeight: 600,
+                      margin: 0,
+                      fontSize: "14px",
+                    }}
+                  >
+                    {user?.name || t("user.defaultName")}
+                  </h6>
+                  <small
+                    style={{ color: "rgb(100, 116, 139)", fontSize: "12px" }}
+                  >
+                    {user?.email || ""}
+                  </small>
+                </div>
+                <button
+                  className="w-full text-left flex items-center gap-2 hover:bg-black/5 transition-colors"
+                  style={{
+                    padding: "10px 16px",
+                    background: "transparent",
+                    color: "rgb(30, 41, 59)",
+                    borderRadius: "0px 0px 12px 12px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setIsProfileOpen(false);
+                    handleLogout();
+                  }}
+                >
+                  <LogOut size={18} />
+                  <span style={{ fontSize: "14px" }}>{t("header.logout")}</span>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );

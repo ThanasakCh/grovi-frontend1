@@ -195,7 +195,7 @@ export default function MobileFieldDetailPage() {
   // Load field if not in context
   useEffect(() => {
     if (!fieldId) {
-      navigate("/dris_project");
+      navigate("/Grovi-cropmonitoring");
       return;
     }
 
@@ -512,7 +512,7 @@ export default function MobileFieldDetailPage() {
       color: "#16a34a",
       bgColor: "#dcfce7",
       enabled: true,
-      onClick: () => navigate(`/dris_project/health/${fieldId}`),
+      onClick: () => navigate(`/Grovi-cropmonitoring/health/${fieldId}`),
     },
     {
       id: "analysis",
@@ -521,7 +521,7 @@ export default function MobileFieldDetailPage() {
       color: "#2563eb",
       bgColor: "#dbeafe",
       enabled: true,
-      onClick: () => navigate(`/dris_project/analysis/${fieldId}`),
+      onClick: () => navigate(`/Grovi-cropmonitoring/analysis/${fieldId}`),
     },
     {
       id: "weather",
@@ -530,7 +530,7 @@ export default function MobileFieldDetailPage() {
       color: "#ea580c",
       bgColor: "#fed7aa",
       enabled: true,
-      onClick: () => navigate(`/dris_project/weather/${fieldId}`),
+      onClick: () => navigate(`/Grovi-cropmonitoring/weather/${fieldId}`),
     },
     {
       id: "droughtRisk",
@@ -539,7 +539,7 @@ export default function MobileFieldDetailPage() {
       color: "#dc2626",
       bgColor: "#fee2e2",
       enabled: true,
-      onClick: () => navigate(`/dris_project/drought/${fieldId}`),
+      onClick: () => navigate(`/Grovi-cropmonitoring/drought/${fieldId}`),
     },
     {
       id: "fertilizer",
@@ -797,7 +797,7 @@ export default function MobileFieldDetailPage() {
                 <div className="p-4 pb-3 shrink-0">
                   <div className="flex items-center justify-between">
                     <button
-                      onClick={() => navigate("/dris_project")}
+                      onClick={() => navigate("/Grovi-cropmonitoring")}
                       className="w-12 h-12 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center text-gray-700 hover:text-green-600 hover:border-green-600 transition-all"
                     >
                       <ChevronLeft size={20} />

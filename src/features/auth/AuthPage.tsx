@@ -74,7 +74,7 @@ const AuthPage: React.FC = () => {
       setRegSuccess(t("auth.registerSuccess"));
 
       setTimeout(() => {
-        const from = location.state?.from?.pathname || "/dris_project";
+        const from = location.state?.from?.pathname || "/Grovi-cropmonitoring";
         navigate(from, { replace: true });
       }, 1000);
     } catch (error: any) {
@@ -97,7 +97,7 @@ const AuthPage: React.FC = () => {
       setIsLoading(true);
       await login(loginData.username_or_email, loginData.password);
 
-      const from = location.state?.from?.pathname || "/dris_project";
+      const from = location.state?.from?.pathname || "/Grovi-cropmonitoring";
       navigate(from, { replace: true });
     } catch (error: any) {
       setLoginError(error.message);

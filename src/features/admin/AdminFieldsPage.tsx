@@ -346,7 +346,7 @@ const AdminFieldsPage: React.FC = () => {
             </div>
           </div>
           <Link
-            to="/dris_project"
+            to="/Grovi-cropmonitoring"
             className="bg-[#4edea3] hover:bg-[#6ffbbe] text-[#003824] text-xs font-bold px-5 py-2.5 rounded-xl transition-colors shadow-lg shadow-[#4edea3]/20 flex items-center justify-center gap-2"
           >
             <Plus className="w-4 h-4" />
@@ -782,7 +782,7 @@ const AdminFieldsPage: React.FC = () => {
                   </button>
 
                   <Link
-                    to={`/dris_project/field/${selectedField.field_id}`}
+                    to={`/Grovi-cropmonitoring/field/${selectedField.field_id}`}
                     className="w-full py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-colors text-xs font-semibold flex items-center justify-center gap-2"
                   >
                     ดูประวัติแบบละเอียด

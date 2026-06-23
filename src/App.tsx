@@ -50,33 +50,35 @@ function AppContent() {
           </Route>
         </Route>
 
+        {/* Public Routes */}
+        <Route path="/" element={<Navigate to="/Grovi-cropmonitoring" replace />} />
+        <Route path="/Grovi-cropmonitoring" element={<DrisProjectMapPage />} />
+
         {/* Standard Protected Routes */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Navigate to="/dris_project" replace />} />
-          <Route path="/dris_project" element={<DrisProjectMapPage />} />
           <Route
-            path="/dris_project/field/:fieldId"
+            path="/Grovi-cropmonitoring/field/:fieldId"
             element={<DrisProjectFieldDetailPage />}
           />
           <Route
-            path="/dris_project/health/:fieldId"
+            path="/Grovi-cropmonitoring/health/:fieldId"
             element={<DrisProjectHealthPage />}
           />
           <Route
-            path="/dris_project/analysis/:fieldId"
+            path="/Grovi-cropmonitoring/analysis/:fieldId"
             element={<DrisProjectAnalysisPage />}
           />
           <Route
-            path="/dris_project/weather/:fieldId"
+            path="/Grovi-cropmonitoring/weather/:fieldId"
             element={<DrisProjectWeatherPage />}
           />
           <Route
-            path="/dris_project/drought/:fieldId"
+            path="/Grovi-cropmonitoring/drought/:fieldId"
             element={<DrisProjectDroughtPage />}
           />
         </Route>
 
-        <Route path="*" element={<Navigate to="/dris_project" replace />} />
+        <Route path="*" element={<Navigate to="/Grovi-cropmonitoring" replace />} />
       </Routes>
     </div>
   );

@@ -244,7 +244,7 @@ const AdminAlertsPage: React.FC = () => {
                     Acknowledge
                   </button>
                   <Link
-                    to={`/dris_project/field/${alert.field_id}`}
+                    to={`/Grovi-cropmonitoring/field/${alert.field_id}`}
                     className="flex-1 md:w-full px-3 py-2 border border-white/10 hover:border-[#4edea3] text-white hover:text-[#4edea3] rounded-lg text-xs font-semibold transition-colors flex items-center justify-center"
                   >
                     View Field

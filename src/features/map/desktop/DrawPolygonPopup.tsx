@@ -4,6 +4,8 @@ import type MapboxDraw from "@mapbox/mapbox-gl-draw";
 import Swal from "sweetalert2";
 import shp from "shpjs";
 import { useLanguage } from "../../../contexts/LanguageContext";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface DesktopDrawPolygonPopupProps {
   draw?: MapboxDraw | null;
@@ -22,6 +24,8 @@ export default function DesktopDrawPolygonPopup({
   const [isImporting, setIsImporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const handleStartDrawing = () => {
     if (draw) {
@@ -263,93 +267,117 @@ export default function DesktopDrawPolygonPopup({
               </button>
             </div>
 
-            {/* Start Drawing Button */}
-            <button
-              onClick={handleStartDrawing}
-              className="w-full flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all duration-200 hover:opacity-90"
-              style={{
-                padding: "12px 16px",
-                background: "rgb(34, 197, 94)",
-                border: "none",
-                color: "white",
-                fontSize: "14px",
-                fontWeight: 600,
-              }}
-            >
-              <Pencil className="w-4 h-4" />
-              {t("draw.start")}
-            </button>
+            {!isAuthenticated ? (
+              <div className="flex flex-col items-center justify-center py-4">
+                <p className="text-sm text-gray-600 mb-4 text-center">
+                  กรุณาเข้าสู่ระบบเพื่อใช้งานฟีเจอร์นี้
+                </p>
+                <button
+                  onClick={() => navigate("/auth")}
+                  className="w-full flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all duration-200 hover:opacity-90"
+                  style={{
+                    padding: "12px 16px",
+                    background: "rgb(59, 130, 246)",
+                    border: "none",
+                    color: "white",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                  }}
+                >
+                  เข้าสู่ระบบ
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* Start Drawing Button */}
+                <button
+                  onClick={handleStartDrawing}
+                  className="w-full flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all duration-200 hover:opacity-90"
+                  style={{
+                    padding: "12px 16px",
+                    background: "rgb(34, 197, 94)",
+                    border: "none",
+                    color: "white",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                  }}
+                >
+                  <Pencil className="w-4 h-4" />
+                  {t("draw.start")}
+                </button>
 
-            {/* Import Button */}
-            <button
-              onClick={handleImportClick}
-              disabled={isImporting}
-              className="w-full flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all duration-200 hover:opacity-90 mt-2"
-              style={{
-                padding: "12px 16px",
-                background: "rgb(59, 130, 246)",
-                border: "none",
-                color: "white",
-                fontSize: "14px",
-                fontWeight: 600,
-                opacity: isImporting ? 0.7 : 1,
-              }}
-            >
-              {isImporting ? (
-                <>
-                  <FileUp className="w-4 h-4 animate-pulse" />
-                  {t("action.importing")}
-                </>
-              ) : (
-                <>
-                  <Upload className="w-4 h-4" />
-                  {t("action.import")}
-                </>
-              )}
-            </button>
+                {/* Import Button */}
+                <button
+                  onClick={handleImportClick}
+                  disabled={isImporting}
+                  className="w-full flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all duration-200 hover:opacity-90 mt-2"
+                  style={{
+                    padding: "12px 16px",
+                    background: "rgb(59, 130, 246)",
+                    border: "none",
+                    color: "white",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    opacity: isImporting ? 0.7 : 1,
+                  }}
+                >
+                  {isImporting ? (
+                    <>
+                      <FileUp className="w-4 h-4 animate-pulse" />
+                      {t("action.importing")}
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4" />
+                      {t("action.import")}
+                    </>
+                  )}
+                </button>
 
-            {/* Supported Formats Info */}
-            <div className="mt-2 p-2 rounded-lg">
-              <p
-                style={{
-                  fontSize: "11px",
-                  color: "rgb(51, 51, 51)",
-                  margin: 0,
-                  lineHeight: 1.4,
-                }}
-              >
-                {t("draw.supportedFormats").replace(":", ": ")}
-              </p>
-            </div>
+                {/* Supported Formats Info */}
+                <div className="mt-2 p-2 rounded-lg">
+                  <p
+                    style={{
+                      fontSize: "11px",
+                      color: "rgb(51, 51, 51)",
+                      margin: 0,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {t("draw.supportedFormats").replace(":", ": ")}
+                  </p>
+                </div>
 
-            {/* My Polygons Section */}
-            <div className="mt-4">
-              <h5
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  color: "rgb(51, 51, 51)",
-                  margin: "0 0 8px 0",
-                }}
-              >
-                {t("field.myFields")} ({savedPolygons})
-              </h5>
-              <p
-                style={{
-                  fontSize: "12px",
-                  color:
-                    savedPolygons > 0
-                      ? "rgb(34, 197, 94)"
-                      : "rgb(156, 163, 175)",
-                  margin: 0,
-                  fontStyle: savedPolygons > 0 ? "normal" : "italic",
-                }}
-              >
-                {savedPolygons > 0
-                  ? `✓ ${t("draw.saved")} ${savedPolygons} ${t("field.unit")}`
-                  : t("draw.noFields")}
-              </p>
-            </div>
+                {/* My Polygons Section */}
+                <div className="mt-4">
+                  <h5
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      color: "rgb(51, 51, 51)",
+                      margin: "0 0 8px 0",
+                    }}
+                  >
+                    {t("field.myFields")} ({savedPolygons})
+                  </h5>
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      color:
+                        savedPolygons > 0
+                          ? "rgb(34, 197, 94)"
+                          : "rgb(156, 163, 175)",
+                      margin: 0,
+                      fontStyle: savedPolygons > 0 ? "normal" : "italic",
+                    }}
+                  >
+                    {savedPolygons > 0
+                      ? `✓ ${t("draw.saved")} ${savedPolygons} ${t("field.unit")}`
+                      : t("draw.noFields")}
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         </>
       )}
