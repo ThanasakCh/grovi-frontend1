@@ -35,6 +35,16 @@ export const getDashboardSummary = async () => {
 };
 
 // === Fields Health ===
+export interface VIStatus {
+  vi_type: string;
+  available: boolean;
+  latest_date?: string | null;
+  total_assets: number;
+  north_asset: string;
+  south_asset: string;
+  active_task_state?: string | null;
+}
+
 export const getFieldsHealth = async (params?: {
   health_status?: string;
   crop_type?: string;

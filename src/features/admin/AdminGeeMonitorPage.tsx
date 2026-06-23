@@ -162,7 +162,15 @@ function ViCard({ vi, onTrigger }: { vi: ViStatus; onTrigger: (v: string) => voi
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {vi.available ? (
+            {vi.active_task_state === 'RUNNING' ? (
+              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-semibold">
+                <RefreshCw className="w-3 h-3 animate-spin" /> กำลังประมวลผล
+              </span>
+            ) : vi.active_task_state === 'READY' ? (
+              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold">
+                <Clock className="w-3 h-3" /> รอคิว (READY)
+              </span>
+            ) : vi.available ? (
               <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 พร้อมใช้
@@ -214,7 +222,8 @@ function ViCard({ vi, onTrigger }: { vi: ViStatus; onTrigger: (v: string) => voi
           </button>
           <button
             onClick={() => onTrigger(vi.vi_type)}
-            className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+            disabled={vi.active_task_state === 'RUNNING' || vi.active_task_state === 'READY'}
+            className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg font-medium transition-all duration-200 ${(vi.active_task_state === 'RUNNING' || vi.active_task_state === 'READY') ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}`}
             style={{ background: `${meta.color}20`, color: meta.color, border: `1px solid ${meta.color}30` }}
           >
             <Play className="w-3 h-3" /> ประมวลผล
