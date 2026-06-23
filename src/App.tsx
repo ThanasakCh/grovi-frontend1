@@ -26,6 +26,7 @@ import AdminFieldsPage from "./features/admin/AdminFieldsPage";
 import AdminUsersPage from "./features/admin/AdminUsersPage";
 import AdminAlertsPage from "./features/admin/AdminAlertsPage";
 import AdminSecurityLogs from './features/admin/pages/AdminSecurityLogs';
+import AdminGeeMonitorPage from './features/admin/AdminGeeMonitorPage';
 
 function AppContent() {
   return (
@@ -45,6 +46,7 @@ function AppContent() {
             <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route path="/admin/alerts" element={<AdminAlertsPage />} />
             <Route path="/admin/security" element={<AdminSecurityLogs />} />
+            <Route path="/admin/gee-monitor" element={<AdminGeeMonitorPage />} />
           </Route>
         </Route>
 

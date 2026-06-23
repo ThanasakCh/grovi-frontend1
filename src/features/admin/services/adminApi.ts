@@ -134,3 +134,21 @@ export const analyzeFieldHistorical = async (fieldId: string, viType: string = '
   });
   return res.data;
 };
+
+// === GEE Asset Monitor ===
+export const getGeeMonitorStatus = async () => {
+  const res = await axios.get('/api/gee-monitor/status');
+  return res.data;
+};
+
+export const getGeeViHistory = async (viType: string) => {
+  const res = await axios.get(`/api/gee-monitor/history/${viType}`);
+  return res.data;
+};
+
+export const triggerGeeExport = async (viType = 'ALL') => {
+  const res = await axios.post('/api/gee-monitor/trigger-export', null, {
+    params: { vi_type: viType },
+  });
+  return res.data;
+};

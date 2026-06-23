@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Sprout, LayoutDashboard, Tractor, Users, BellRing, Settings, LogOut, Search, Bell, Shield } from "lucide-react";
+import { Sprout, LayoutDashboard, Tractor, Users, BellRing, Settings, LogOut, Search, Bell, Shield, Satellite } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 
 const AdminLayout: React.FC = () => {
@@ -110,6 +110,18 @@ const AdminLayout: React.FC = () => {
           >
             <Shield className="w-5 h-5" />
             <span className="text-sm font-medium">Security Logs</span>
+          </Link>
+
+          <Link
+            to="/admin/gee-monitor"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+              isActive("/admin/gee-monitor")
+                ? "text-[#4edea3] font-bold border-r-2 border-[#4edea3] bg-[#4edea3]/10"
+                : "text-[#bbcabf] hover:bg-[#31394d]/50 hover:text-[#dae2fd]"
+            }`}
+          >
+            <Satellite className="w-5 h-5" />
+            <span className="text-sm font-medium">GEE Monitor</span>
           </Link>
         </div>
 
@@ -254,6 +266,18 @@ const AdminLayout: React.FC = () => {
               <Shield className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-medium font-sans">Security</span>
+          </Link>
+
+          <Link
+            to="/admin/gee-monitor"
+            className={`flex flex-col items-center justify-center w-16 h-full transition-colors ${
+              isActive("/admin/gee-monitor") ? "text-[#4edea3]" : "text-[#bbcabf]"
+            }`}
+          >
+            <div className={`w-10 h-8 flex items-center justify-center rounded-full mb-0.5 ${isActive("/admin/gee-monitor") ? "bg-[#4edea3]/20" : ""}`}>
+              <Satellite className="w-5 h-5" />
+            </div>
+            <span className="text-[10px] font-medium font-sans">GEE</span>
           </Link>
         </nav>
       </div>
